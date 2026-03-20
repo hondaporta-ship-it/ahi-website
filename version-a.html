@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AHI — Artificial Human Intelligence</title>
+<meta name="description" content="御社のAI、使いこなせていますか？ AHIは日本の中堅企業に深く入り込み、AIで業務を変革するFDEカンパニーです。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ===== Reset ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: 'Zen Kaku Gothic New', 'Hiragino Kaku Gothic ProN', sans-serif;
+  background: #0e0e12;
+  color: #d0d0d0;
+  line-height: 1.8;
+  overflow-x: hidden;
+}
+h1, h2, h3, h4 { font-family: 'Sora', 'Zen Kaku Gothic New', sans-serif; }
+.label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: #E8B84A;
+  margin-bottom: 16px;
+  display: block;
+}
+.unicorn-white {
+  fill: none;
+  stroke: rgba(255,255,255,0.85);
+  stroke-width: 2.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.horn-gold {
+  fill: none;
+  stroke: #E8B84A;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ===== Nav ===== */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 20px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.4s;
+}
+nav.scrolled {
+  background: rgba(14,14,18,0.95);
+  backdrop-filter: blur(16px);
+  padding: 14px 48px;
+  box-shadow: 0 1px 30px rgba(0,0,0,0.4);
+}
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+.nav-logo svg { width: 30px; height: 30px; }
+.nav-logo-text {
+  font-family: 'Sora', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 3px;
+}
+.nav-logo-text .a { color: #E8685A; }
+.nav-logo-text .h { color: #7BC67E; }
+.nav-logo-text .i { color: #5B9BD5; }
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a {
+  color: #777;
+  text-decoration: none;
+  font-size: 12px;
+  font-family: 'Montserrat', sans-serif;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: color 0.3s;
+}
+.nav-links a:hover { color: #E8B84A; }
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 4px;
+  z-index: 1001;
+}
+.hamburger span {
+  width: 22px;
+  height: 2px;
+  background: #ccc;
+  transition: all 0.3s;
+}
+
+/* ===== Hero ===== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  padding: 120px 24px 80px;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(232,184,74,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse at 30% 70%, rgba(232,104,90,0.03) 0%, transparent 50%);
+  animation: drift 16s ease-in-out infinite alternate;
+}
+@keyframes drift {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.04) translate(-1%,1%); }
+}
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 700px;
+}
+.hero-question {
+  font-size: clamp(1.6rem, 4vw, 2.8rem);
+  font-weight: 700;
+  color: #f5f5f5;
+  line-height: 1.4;
+  margin-bottom: 24px;
+}
+.hero-question .gold { color: #E8B84A; }
+.hero-answer {
+  font-size: clamp(0.9rem, 1.6vw, 1.05rem);
+  color: #777;
+  max-width: 520px;
+  margin: 0 auto 20px;
+  line-height: 2;
+  font-weight: 300;
+}
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+  margin: 48px 0;
+  flex-wrap: wrap;
+}
+.hero-stat .num {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  color: #E8B84A;
+}
+.hero-stat .num .unit { font-size: 14px; font-weight: 400; }
+.hero-stat .txt {
+  font-size: 11px;
+  color: #666;
+  margin-top: 4px;
+}
+.hero-cta-row {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+.btn-primary {
+  display: inline-block;
+  padding: 16px 44px;
+  background: #E8B84A;
+  color: #0e0e12;
+  text-decoration: none;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: all 0.3s;
+}
+.btn-primary:hover { background: #d4a63e; }
+.btn-outline {
+  display: inline-block;
+  padding: 16px 44px;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #aaa;
+  text-decoration: none;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: all 0.3s;
+}
+.btn-outline:hover { border-color: #E8B84A; color: #E8B84A; }
+
+/* ===== Pain Points ===== */
+.pain-band {
+  background: #131318;
+  border-top: 1px solid rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.pain-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 100px 48px;
+}
+.pain-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin-top: 48px;
+}
+.pain-card {
+  padding: 32px 28px;
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.01);
+  transition: border-color 0.3s, transform 0.3s;
+}
+.pain-card:hover {
+  border-color: rgba(232,184,74,0.2);
+  transform: translateY(-4px);
+}
+.pain-icon { font-size: 24px; margin-bottom: 16px; }
+.pain-card h4 {
+  font-size: 15px;
+  color: #e0e0e0;
+  margin-bottom: 10px;
+}
+.pain-card p {
+  font-size: 13px;
+  color: #777;
+  line-height: 1.8;
+}
+.pain-card .solution {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  font-size: 13px;
+  color: #E8B84A;
+}
+
+/* ===== Section ===== */
+.section {
+  padding: 120px 48px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.section h2 {
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-weight: 700;
+  color: #f0f0f0;
+  margin-bottom: 20px;
+}
+.section p { color: #999; font-size: 15px; margin-bottom: 20px; }
+.bar { width: 40px; height: 2px; background: #E8B84A; margin-bottom: 40px; }
+
+/* ===== Process ===== */
+.process-track {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  margin-top: 48px;
+  position: relative;
+}
+.process-track::before {
+  content: '';
+  position: absolute;
+  top: 28px;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(232,184,74,0.3), rgba(232,184,74,0.3), transparent);
+}
+.process-step {
+  text-align: center;
+  position: relative;
+  padding: 0 12px;
+}
+.step-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #E8B84A;
+  margin: 0 auto 20px;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 0 16px rgba(232,184,74,0.25);
+}
+.process-step h4 {
+  font-size: 14px;
+  color: #e0e0e0;
+  margin-bottom: 8px;
+}
+.process-step p {
+  font-size: 12px;
+  color: #777;
+  line-height: 1.7;
+}
+.process-step .step-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  color: #E8B84A;
+  letter-spacing: 2px;
+  margin-bottom: 4px;
+}
+
+/* ===== Results ===== */
+.results-band {
+  background: #131318;
+  border-top: 1px solid rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.results-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 100px 48px;
+}
+.results-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  margin-top: 48px;
+  align-items: start;
+}
+.result-case {
+  padding: 36px 32px;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.01);
+}
+.result-case .case-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #555;
+  margin-bottom: 12px;
+}
+.result-case h4 {
+  font-size: 16px;
+  color: #e0e0e0;
+  margin-bottom: 16px;
+}
+.result-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-size: 13px;
+}
+.result-row:last-child { border-bottom: none; }
+.result-row .r-key { color: #777; }
+.result-row .r-before { color: #666; text-decoration: line-through; }
+.result-row .r-after { color: #E8B84A; font-weight: 600; }
+.result-row .r-arrow { color: #555; margin: 0 8px; }
+
+/* ===== Why AHI ===== */
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+}
+.why-card {
+  padding: 28px 24px;
+  border-left: 2px solid rgba(232,184,74,0.2);
+  transition: border-color 0.3s;
+}
+.why-card:hover { border-color: #E8B84A; }
+.why-card h4 {
+  font-size: 14px;
+  color: #E8B84A;
+  margin-bottom: 8px;
+}
+.why-card p {
+  font-size: 13px;
+  color: #888;
+  line-height: 1.8;
+  margin-bottom: 0;
+}
+
+/* ===== Contact ===== */
+.contact-band {
+  background: #0e0e12;
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
+.contact-inner {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 120px 48px;
+  text-align: center;
+}
+.contact-inner h2 {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  color: #f0f0f0;
+  margin-bottom: 12px;
+}
+.contact-inner > p {
+  color: #777;
+  font-size: 15px;
+  margin-bottom: 40px;
+}
+.contact-grid {
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+.contact-item .ci-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #555;
+  margin-bottom: 6px;
+}
+.contact-item .ci-value { font-size: 15px; color: #ccc; }
+.contact-item a { color: #E8B84A; text-decoration: none; transition: opacity 0.3s; }
+.contact-item a:hover { opacity: 0.7; }
+.contact-cta-note {
+  font-size: 13px;
+  color: #666;
+  margin-top: 32px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+/* ===== Footer ===== */
+footer {
+  text-align: center;
+  padding: 32px 24px;
+  border-top: 1px solid rgba(255,255,255,0.04);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  color: #444;
+  letter-spacing: 1px;
+}
+
+/* ===== Animations ===== */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.25,0.46,0.45,0.94), transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.hero-inner > * {
+  opacity: 0;
+  animation: fadeUp 0.8s forwards;
+}
+.hero-inner > *:nth-child(1) { animation-delay: 0.2s; }
+.hero-inner > *:nth-child(2) { animation-delay: 0.4s; }
+.hero-inner > *:nth-child(3) { animation-delay: 0.6s; }
+.hero-inner > *:nth-child(4) { animation-delay: 0.8s; }
+
+/* ===== Mobile ===== */
+@media (max-width: 768px) {
+  nav { padding: 16px 24px; }
+  nav.scrolled { padding: 12px 24px; }
+  .nav-links { display: none; }
+  .nav-links.open {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    inset: 0;
+    background: rgba(14,14,18,0.98);
+    justify-content: center;
+    align-items: center;
+    gap: 36px;
+    z-index: 999;
+  }
+  .nav-links.open a { font-size: 16px; color: #ccc; }
+  .hamburger { display: flex; }
+  .section { padding: 80px 24px; }
+  .pain-inner, .results-inner { padding: 80px 24px; }
+  .pain-grid { grid-template-columns: 1fr; }
+  .process-track { grid-template-columns: 1fr 1fr; gap: 32px; }
+  .process-track::before { display: none; }
+  .results-grid { grid-template-columns: 1fr; }
+  .why-grid { grid-template-columns: 1fr; }
+  .contact-inner { padding: 80px 24px; }
+  .hero-stats { gap: 32px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">
+    <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+      <path class="unicorn-white" d="M22 44 Q15 38 16 30 Q17 22 24 18 L28 18 Q36 16 40 20 Q44 24 42 32 Q40 40 32 44 Q28 46 22 44Z"/>
+      <path class="horn-gold" d="M24 18 L28 8 L30 20"/>
+    </svg>
+    <span class="nav-logo-text"><span class="a">A</span><span class="h">H</span><span class="i">I</span></span>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#problems" onclick="closeMenu()">課題</a></li>
+    <li><a href="#process" onclick="closeMenu()">導入の流れ</a></li>
+    <li><a href="#results" onclick="closeMenu()">実績</a></li>
+    <li><a href="#why" onclick="closeMenu()">選ばれる理由</a></li>
+    <li><a href="#contact" onclick="closeMenu()">お問い合わせ</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="メニュー">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-inner">
+    <h1 class="hero-question">御社のAI、<br><span class="gold">使いこなせていますか？</span></h1>
+    <p class="hero-answer">AI導入率57.7%。しかし「業務が変わった」と言える企業はごくわずか。<br>問題はツールではなく、課題の見つけ方にある。</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="num">57.7<span class="unit">%</span></div>
+        <div class="txt">生成AI導入済み企業</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num">70.3<span class="unit">%</span></div>
+        <div class="txt">が「スキル不足」を課題に</div>
+      </div>
+    </div>
+    <div class="hero-cta-row">
+      <a href="#contact" class="btn-primary">無料相談する</a>
+      <a href="#process" class="btn-outline">導入の流れを見る</a>
+    </div>
+  </div>
+</section>
+
+<!-- Pain Points -->
+<div class="pain-band" id="problems">
+  <div class="pain-inner">
+    <div class="reveal">
+      <span class="label">Problems</span>
+      <h2 style="font-size:clamp(1.5rem,3vw,2.2rem);color:#f0f0f0;margin-bottom:20px;">こんな状態になっていませんか？</h2>
+      <div class="bar"></div>
+    </div>
+    <div class="pain-grid reveal">
+      <div class="pain-card">
+        <div class="pain-icon">📊</div>
+        <h4>AIツールは入れた。でも業務が変わらない</h4>
+        <p>ChatGPTもCopilotも導入済み。でも社員が使わない、使い方がわからない、結局元のやり方に戻っている。</p>
+        <div class="solution">→ 業務フローから変える。ツールだけでは何も変わらない。</div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">📋</div>
+        <h4>コンサルに頼んだ。レポートだけ来た</h4>
+        <p>高額なコンサル費用を払って、立派なレポートが来た。でも「で、誰がやるの？」で止まっている。</p>
+        <div class="solution">→ レポートは出さない。現場に入って一緒に手を動かす。</div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">🔧</div>
+        <h4>SIerに頼んだ。システムは動く。業務は動かない</h4>
+        <p>仕様通りのシステムはできた。でも現場のオペレーションと噛み合わず、二重作業が増えただけ。</p>
+        <div class="solution">→ 業務理解なしの開発はしない。現場の動きに合わせて作る。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Process -->
+<section class="section" id="process">
+  <div class="reveal">
+    <span class="label">Process</span>
+    <h2>導入の流れ</h2>
+    <div class="bar"></div>
+    <p>初期診断から始めることで、効果が出るか確認した上で次に進めます。リスクゼロでスタートできます。</p>
+  </div>
+  <div class="process-track reveal">
+    <div class="process-step">
+      <div class="step-dot"></div>
+      <div class="step-label">STEP 01</div>
+      <h4>初期診断</h4>
+      <p>2週間の業務診断。現場に入り、本当のボトルネックを特定する。</p>
+    </div>
+    <div class="process-step">
+      <div class="step-dot"></div>
+      <div class="step-label">STEP 02</div>
+      <h4>戦略設計</h4>
+      <p>AI×業務改革の戦略を設計。どこに手を入れると最大効果か。</p>
+    </div>
+    <div class="process-step">
+      <div class="step-dot"></div>
+      <div class="step-label">STEP 03</div>
+      <h4>実装・検証</h4>
+      <p>小さく始めて効果を検証。成功パターンを拡大する。</p>
+    </div>
+    <div class="process-step">
+      <div class="step-dot"></div>
+      <div class="step-label">STEP 04</div>
+      <h4>定着・自走</h4>
+      <p>教育・マニュアル・運用フロー。御社だけで回せる状態を作る。</p>
+    </div>
+  </div>
+</section>
+
+<!-- Results -->
+<div class="results-band" id="results">
+  <div class="results-inner">
+    <div class="reveal">
+      <span class="label">Results</span>
+      <h2 style="font-size:clamp(1.5rem,3vw,2.2rem);color:#f0f0f0;margin-bottom:20px;">導入効果のイメージ</h2>
+      <div class="bar"></div>
+      <p style="color:#999;font-size:15px;margin-bottom:20px;">AHIのFDEモデルで実現する業務改革の想定効果。</p>
+    </div>
+    <div class="results-grid reveal">
+      <div class="result-case">
+        <div class="case-label">Case 01 — 事務業務</div>
+        <h4>報告書・帳票作成の自動化</h4>
+        <div class="result-row">
+          <span class="r-key">作業時間</span>
+          <span><span class="r-before">月40時間</span><span class="r-arrow">→</span><span class="r-after">月8時間</span></span>
+        </div>
+        <div class="result-row">
+          <span class="r-key">削減率</span>
+          <span class="r-after">80%削減</span>
+        </div>
+        <div class="result-row">
+          <span class="r-key">年間効果</span>
+          <span class="r-after">約384時間の創出</span>
+        </div>
+      </div>
+      <div class="result-case">
+        <div class="case-label">Case 02 — 意思決定</div>
+        <h4>データ分析による経営判断の高速化</h4>
+        <div class="result-row">
+          <span class="r-key">分析期間</span>
+          <span><span class="r-before">2週間</span><span class="r-arrow">→</span><span class="r-after">当日</span></span>
+        </div>
+        <div class="result-row">
+          <span class="r-key">判断スピード</span>
+          <span class="r-after">10倍</span>
+        </div>
+        <div class="result-row">
+          <span class="r-key">対応範囲</span>
+          <span class="r-after">全社データの横断分析</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Why AHI -->
+<section class="section" id="why">
+  <div class="reveal">
+    <span class="label">Why AHI</span>
+    <h2>AHIが選ばれる理由</h2>
+    <div class="bar"></div>
+  </div>
+  <div class="why-grid reveal">
+    <div class="why-card">
+      <h4>現場に入る</h4>
+      <p>レポートを送って終わりではない。御社のチームの一員として、課題の定義から実装まで現場で共に動く。</p>
+    </div>
+    <div class="why-card">
+      <h4>ノーと言える</h4>
+      <p>御用聞きにはならない。必要のないことは「やらない」と言える対等な関係を築く。本質だけを解決する。</p>
+    </div>
+    <div class="why-card">
+      <h4>30年の現場力</h4>
+      <p>数千の現場を指揮してきたディレクション経験。人を動かし、段取りをつけ、成果を出す力。</p>
+    </div>
+    <div class="why-card">
+      <h4>AIの実践者</h4>
+      <p>理論ではなく、毎日AIを使い倒している実践者が伴走。机上の空論は一切ない。</p>
+    </div>
+    <div class="why-card">
+      <h4>価格のスイートスポット</h4>
+      <p>大手コンサル（月500万〜）では高すぎ、フリーランスでは不安。月100〜300万円で深く入り込む。</p>
+    </div>
+    <div class="why-card">
+      <h4>400社のネットワーク</h4>
+      <p>国のプロジェクトに参画した成長企業約400社のリストを保有。成長意欲のある企業を知り尽くしている。</p>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<div class="contact-band" id="contact">
+  <div class="contact-inner">
+    <div class="reveal">
+      <span class="label">Contact</span>
+      <h2>まずは無料相談から</h2>
+      <p>御社の状況をお聞きし、AHIで効果が出せるかを正直にお伝えします。<br>効果が見込めない場合は、はっきりとそうお伝えします。</p>
+      <div class="contact-grid">
+        <div class="contact-item">
+          <div class="ci-label">Email</div>
+          <div class="ci-value"><a href="mailto:info@ahi-consulting.jp">info@ahi-consulting.jp</a></div>
+        </div>
+        <div class="contact-item">
+          <div class="ci-label">Location</div>
+          <div class="ci-value">福岡県福岡市博多区</div>
+        </div>
+      </div>
+      <div class="contact-cta-note">初期診断（2週間）は50万円〜。効果を確認してからリテーナー契約に進めます。</div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <p>&copy; 2026 AHI — Artificial Human Intelligence</p>
+</footer>
+
+<script>
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 60);
+});
+function toggleMenu() { document.getElementById('navLinks').classList.toggle('open'); }
+function closeMenu() { document.getElementById('navLinks').classList.remove('open'); }
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

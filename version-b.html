@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AHI — Artificial Human Intelligence</title>
+<meta name="description" content="AHI - 本質的な課題だけを、解決する。日本の中堅企業に深く入り込み、AIで業務を変革するFDEカンパニー。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ===== Reset ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: 'Zen Kaku Gothic New', 'Hiragino Kaku Gothic ProN', sans-serif;
+  background: #0e0e12;
+  color: #d0d0d0;
+  line-height: 1.8;
+  overflow-x: hidden;
+}
+
+/* ===== Typography ===== */
+h1, h2, h3, h4 { font-family: 'Sora', 'Zen Kaku Gothic New', sans-serif; }
+.label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: #E8B84A;
+  margin-bottom: 16px;
+  display: block;
+}
+.gold { color: #E8B84A; }
+
+/* ===== Unicorn SVG ===== */
+.unicorn-white {
+  fill: none;
+  stroke: rgba(255,255,255,0.85);
+  stroke-width: 2.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.horn-gold {
+  fill: none;
+  stroke: #E8B84A;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ===== Navigation ===== */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 20px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.4s;
+}
+nav.scrolled {
+  background: rgba(14,14,18,0.95);
+  backdrop-filter: blur(16px);
+  padding: 14px 48px;
+  box-shadow: 0 1px 30px rgba(0,0,0,0.4);
+}
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+.nav-logo svg { width: 30px; height: 30px; }
+.nav-logo-text {
+  font-family: 'Sora', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 3px;
+}
+.nav-logo-text .a { color: #E8685A; }
+.nav-logo-text .h { color: #7BC67E; }
+.nav-logo-text .i { color: #5B9BD5; }
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a {
+  color: #777;
+  text-decoration: none;
+  font-size: 12px;
+  font-family: 'Montserrat', sans-serif;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: color 0.3s;
+}
+.nav-links a:hover { color: #E8B84A; }
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 4px;
+  z-index: 1001;
+}
+.hamburger span {
+  width: 22px;
+  height: 2px;
+  background: #ccc;
+  transition: all 0.3s;
+}
+
+/* ===== Hero ===== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(232,184,74,0.05) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(91,155,213,0.03) 0%, transparent 50%);
+  animation: drift 16s ease-in-out infinite alternate;
+}
+@keyframes drift {
+  0% { transform: scale(1) translate(0,0); }
+  100% { transform: scale(1.03) translate(-1%,1%); }
+}
+.hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  padding: 0 32px;
+}
+.hero-statement {
+  font-size: clamp(2rem, 5vw, 3.6rem);
+  font-weight: 700;
+  line-height: 1.3;
+  color: #f5f5f5;
+  margin-bottom: 28px;
+}
+.hero-statement .em {
+  color: #E8B84A;
+  position: relative;
+}
+.hero-sub {
+  font-size: clamp(0.95rem, 1.8vw, 1.15rem);
+  color: #888;
+  max-width: 560px;
+  margin-bottom: 48px;
+  font-weight: 300;
+  line-height: 2;
+}
+.hero-cta {
+  display: inline-block;
+  padding: 16px 48px;
+  border: 1px solid rgba(232,184,74,0.5);
+  color: #E8B84A;
+  text-decoration: none;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  transition: all 0.3s;
+}
+.hero-cta:hover {
+  background: #E8B84A;
+  color: #0e0e12;
+  border-color: #E8B84A;
+}
+.hero-brand {
+  position: absolute;
+  right: -40px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.04;
+  pointer-events: none;
+}
+.hero-brand svg { width: 400px; height: 400px; }
+
+/* ===== Section Base ===== */
+.section {
+  padding: 120px 48px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.section-narrow { max-width: 800px; }
+.section h2 {
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-weight: 700;
+  color: #f0f0f0;
+  margin-bottom: 20px;
+}
+.section p {
+  color: #999;
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+.bar {
+  width: 40px;
+  height: 2px;
+  background: #E8B84A;
+  margin-bottom: 40px;
+}
+
+/* ===== Philosophy (Full-width band) ===== */
+.philosophy-band {
+  background: #131318;
+  border-top: 1px solid rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.philosophy-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 120px 48px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 48px;
+}
+.phil-card {
+  padding: 8px 0;
+}
+.phil-num {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 48px;
+  font-weight: 800;
+  color: rgba(232,184,74,0.12);
+  line-height: 1;
+  margin-bottom: 16px;
+}
+.phil-card h3 {
+  font-size: 17px;
+  color: #E8B84A;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+.phil-card p {
+  font-size: 14px;
+  color: #888;
+  line-height: 1.9;
+}
+
+/* ===== What We Do ===== */
+.what-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  margin-top: 48px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.what-cell {
+  padding: 40px 36px;
+  background: #0e0e12;
+  transition: background 0.3s;
+}
+.what-cell:hover { background: #141419; }
+.what-num {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: #E8B84A;
+  margin-bottom: 12px;
+}
+.what-cell h4 {
+  font-size: 16px;
+  color: #e0e0e0;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.what-cell p {
+  font-size: 13px;
+  color: #777;
+  margin-bottom: 0;
+  line-height: 1.8;
+}
+
+/* ===== Approach: FDE ===== */
+.approach-band {
+  background: #131318;
+  border-top: 1px solid rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.approach-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 120px 48px;
+}
+.approach-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-top: 48px;
+}
+.approach-col {
+  padding: 36px 32px;
+  border-radius: 12px;
+}
+.approach-col.others {
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.01);
+}
+.approach-col.ahi {
+  border: 1px solid rgba(232,184,74,0.2);
+  background: rgba(232,184,74,0.03);
+}
+.approach-col h3 {
+  font-size: 13px;
+  font-family: 'Montserrat', sans-serif;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+.approach-col.others h3 { color: #666; }
+.approach-col.ahi h3 { color: #E8B84A; }
+.approach-item {
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+}
+.approach-item:last-child { border-bottom: none; }
+.approach-item .key {
+  font-size: 13px;
+  color: #666;
+  flex-shrink: 0;
+}
+.approach-col.ahi .approach-item .key { color: #999; }
+.approach-item .val {
+  font-size: 13px;
+  color: #555;
+  text-align: right;
+}
+.approach-col.ahi .approach-item .val { color: #ccc; }
+
+/* ===== Numbers Band ===== */
+.numbers-band {
+  padding: 80px 48px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.numbers-row {
+  display: flex;
+  justify-content: center;
+  gap: 80px;
+  text-align: center;
+}
+.num-item .big {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 800;
+  color: #E8B84A;
+  line-height: 1;
+}
+.num-item .unit {
+  font-size: 14px;
+  color: #E8B84A;
+  font-weight: 400;
+}
+.num-item .desc {
+  font-size: 12px;
+  color: #666;
+  margin-top: 8px;
+  letter-spacing: 1px;
+}
+
+/* ===== About / Trust ===== */
+.trust-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: start;
+  margin-top: 48px;
+}
+.trust-text p {
+  font-size: 14px;
+  color: #888;
+  line-height: 2;
+}
+.trust-facts {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.trust-fact {
+  padding: 20px 24px;
+  border-left: 2px solid rgba(232,184,74,0.3);
+  background: rgba(255,255,255,0.02);
+  border-radius: 0 8px 8px 0;
+}
+.trust-fact h4 {
+  font-size: 13px;
+  color: #E8B84A;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+.trust-fact p {
+  font-size: 13px;
+  color: #777;
+  margin-bottom: 0;
+}
+
+/* ===== Contact ===== */
+.contact-band {
+  background: #131318;
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
+.contact-inner {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 120px 48px;
+  text-align: center;
+}
+.contact-inner h2 {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  color: #f0f0f0;
+  margin-bottom: 16px;
+}
+.contact-inner p {
+  color: #777;
+  font-size: 15px;
+  margin-bottom: 40px;
+}
+.contact-grid {
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+  flex-wrap: wrap;
+}
+.contact-item {
+  text-align: center;
+}
+.contact-item .ci-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #555;
+  margin-bottom: 6px;
+}
+.contact-item .ci-value {
+  font-size: 15px;
+  color: #ccc;
+}
+.contact-item a {
+  color: #E8B84A;
+  text-decoration: none;
+  transition: opacity 0.3s;
+}
+.contact-item a:hover { opacity: 0.7; }
+
+/* ===== Footer ===== */
+footer {
+  text-align: center;
+  padding: 32px 24px;
+  border-top: 1px solid rgba(255,255,255,0.04);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  color: #444;
+  letter-spacing: 1px;
+}
+
+/* ===== Animations ===== */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.25,0.46,0.45,0.94), transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.hero-inner > * {
+  opacity: 0;
+  animation: fadeUp 0.8s forwards;
+}
+.hero-inner > *:nth-child(1) { animation-delay: 0.2s; }
+.hero-inner > *:nth-child(2) { animation-delay: 0.5s; }
+.hero-inner > *:nth-child(3) { animation-delay: 0.8s; }
+
+/* ===== Mobile ===== */
+@media (max-width: 768px) {
+  nav { padding: 16px 24px; }
+  nav.scrolled { padding: 12px 24px; }
+  .nav-links { display: none; }
+  .nav-links.open {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    inset: 0;
+    background: rgba(14,14,18,0.98);
+    justify-content: center;
+    align-items: center;
+    gap: 36px;
+    z-index: 999;
+  }
+  .nav-links.open a { font-size: 16px; color: #ccc; }
+  .hamburger { display: flex; }
+  .hero-inner { padding: 0 24px; }
+  .hero-brand { display: none; }
+  .section { padding: 80px 24px; }
+  .philosophy-inner { padding: 80px 24px; grid-template-columns: 1fr; gap: 40px; }
+  .what-grid { grid-template-columns: 1fr; }
+  .approach-inner { padding: 80px 24px; }
+  .approach-compare { grid-template-columns: 1fr; }
+  .numbers-row { gap: 40px; flex-wrap: wrap; }
+  .trust-content { grid-template-columns: 1fr; gap: 40px; }
+  .contact-inner { padding: 80px 24px; }
+  .contact-grid { gap: 32px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">
+    <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+      <path class="unicorn-white" d="M22 44 Q15 38 16 30 Q17 22 24 18 L28 18 Q36 16 40 20 Q44 24 42 32 Q40 40 32 44 Q28 46 22 44Z"/>
+      <path class="horn-gold" d="M24 18 L28 8 L30 20"/>
+    </svg>
+    <span class="nav-logo-text"><span class="a">A</span><span class="h">H</span><span class="i">I</span></span>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#philosophy" onclick="closeMenu()">Philosophy</a></li>
+    <li><a href="#services" onclick="closeMenu()">Services</a></li>
+    <li><a href="#approach" onclick="closeMenu()">Approach</a></li>
+    <li><a href="#about" onclick="closeMenu()">About</a></li>
+    <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="メニュー">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-inner">
+    <h1 class="hero-statement">本質的な課題だけを、<br><span class="em">解決する。</span></h1>
+    <p class="hero-sub">AIを導入しても、業務が変わらない。<br>その原因は技術ではなく、課題の定義にある。<br>AHIは御社の現場に入り込み、本当の問題を見つけ、解決します。</p>
+    <a href="#contact" class="hero-cta">Contact Us</a>
+  </div>
+  <div class="hero-brand">
+    <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+      <path class="unicorn-white" d="M22 44 Q15 38 16 30 Q17 22 24 18 L28 18 Q36 16 40 20 Q44 24 42 32 Q40 40 32 44 Q28 46 22 44Z" style="stroke-width:0.8;stroke:rgba(255,255,255,0.15);"/>
+      <path class="horn-gold" d="M24 18 L28 8 L30 20" style="stroke-width:1;stroke:rgba(232,184,74,0.15);"/>
+    </svg>
+  </div>
+</section>
+
+<!-- Philosophy -->
+<div class="philosophy-band" id="philosophy">
+  <div class="philosophy-inner">
+    <div class="phil-card reveal">
+      <div class="phil-num">01</div>
+      <h3>対等であること</h3>
+      <p>御用聞きにはならない。顧客と対等な「横並び」の関係で、必要なことには「ノー」と言える。本質を見極めるために、対等でなければならない。</p>
+    </div>
+    <div class="phil-card reveal">
+      <div class="phil-num">02</div>
+      <h3>現場に入ること</h3>
+      <p>レポートを納品して終わりではない。御社のチームの一員として、課題の定義から実装・運用まで、現場で共に手を動かす。</p>
+    </div>
+    <div class="phil-card reveal">
+      <div class="phil-num">03</div>
+      <h3>本質だけを解くこと</h3>
+      <p>Excelの使い方は教えない。倉庫の整理もしない。御社の事業成長を阻む根本問題だけにフォーカスし、確実に解決する。</p>
+    </div>
+  </div>
+</div>
+
+<!-- What We Do -->
+<section class="section" id="services">
+  <div class="reveal">
+    <span class="label">Services</span>
+    <h2>ツール導入で終わらない、<br>業務変革の実装</h2>
+    <div class="bar"></div>
+    <p>AIを入れただけでは何も変わらない。業務の流れを変え、人の動きを変え、成果が出るところまで伴走する。それがAHIの仕事です。</p>
+  </div>
+  <div class="what-grid reveal">
+    <div class="what-cell">
+      <div class="what-num">STEP 01</div>
+      <h4>初期診断</h4>
+      <p>2週間の業務診断で「本当のボトルネック」を特定。現場ヒアリングとデータ分析を組み合わせ、表面的な症状ではなく根本原因を見つける。</p>
+    </div>
+    <div class="what-cell">
+      <div class="what-num">STEP 02</div>
+      <h4>戦略設計</h4>
+      <p>「どこにAIを入れると最大効果か」を設計。ツール選定ではなく、業務プロセス全体を見渡した戦略を立てる。</p>
+    </div>
+    <div class="what-cell">
+      <div class="what-num">STEP 03</div>
+      <h4>実装・検証</h4>
+      <p>小さく始めて効果を検証するMVP型アプローチ。成功パターンを確認してから拡大するため、リスクを最小限に抑える。</p>
+    </div>
+    <div class="what-cell">
+      <div class="what-num">STEP 04</div>
+      <h4>定着・自走</h4>
+      <p>社員教育、マニュアル整備、運用フロー構築。AHIがいなくなっても御社だけで回せる状態をつくり、引き渡す。</p>
+    </div>
+  </div>
+</section>
+
+<!-- Approach: FDE -->
+<div class="approach-band" id="approach">
+  <div class="approach-inner">
+    <div class="reveal">
+      <span class="label">Approach</span>
+      <h2>FDE — 現場に深く入り込む</h2>
+      <div class="bar"></div>
+      <p>AHIは、パランティア（Palantir）が確立したFDE（Forward Deployed Engineer）モデルを、日本の中堅企業向けに最適化しました。<br>「開発者 × コンサルタント × プロジェクトリーダー」を一人で担い、課題そのものを再定義しながら仕組みを構築します。</p>
+    </div>
+    <div class="approach-compare reveal">
+      <div class="approach-col others">
+        <h3>従来のアプローチ</h3>
+        <div class="approach-item"><span class="key">立ち位置</span><span class="val">ベンダー側として外から納品</span></div>
+        <div class="approach-item"><span class="key">開発</span><span class="val">ウォーターフォール・仕様固定</span></div>
+        <div class="approach-item"><span class="key">成果物</span><span class="val">レポート or システム納品</span></div>
+        <div class="approach-item"><span class="key">関係性</span><span class="val">契約単位で終了</span></div>
+        <div class="approach-item"><span class="key">価格帯</span><span class="val">月額500万円〜 or 数千万/案件</span></div>
+      </div>
+      <div class="approach-col ahi">
+        <h3>AHI — FDEモデル</h3>
+        <div class="approach-item"><span class="key">立ち位置</span><span class="val">チームの一員として中に入る</span></div>
+        <div class="approach-item"><span class="key">開発</span><span class="val">MVP型・小さく検証しながら構築</span></div>
+        <div class="approach-item"><span class="key">成果物</span><span class="val">業務そのものの変革</span></div>
+        <div class="approach-item"><span class="key">関係性</span><span class="val">長期パートナーとして継続改善</span></div>
+        <div class="approach-item"><span class="key">価格帯</span><span class="val">月額100〜300万円</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Numbers -->
+<div class="numbers-band">
+  <div class="numbers-row reveal">
+    <div class="num-item">
+      <div class="big">30<span class="unit">年</span></div>
+      <div class="desc">現場ディレクション経験</div>
+    </div>
+    <div class="num-item">
+      <div class="big">400<span class="unit">社</span></div>
+      <div class="desc">成長企業リスト保有</div>
+    </div>
+    <div class="num-item">
+      <div class="big">108<span class="unit">年</span></div>
+      <div class="desc">家業が培った信頼のDNA</div>
+    </div>
+  </div>
+</div>
+
+<!-- About / Trust -->
+<section class="section section-narrow" id="about">
+  <div class="reveal">
+    <span class="label">About</span>
+    <h2>信頼の根拠</h2>
+    <div class="bar"></div>
+  </div>
+  <div class="trust-content reveal">
+    <div class="trust-text">
+      <p>AHIの強みは、テクノロジーだけではありません。</p>
+      <p>代表の本田英樹は、30年にわたりイベントディレクターとして数千の現場を指揮してきました。段取り力、人を動かす力、現場の空気を読む力。これらはAIでは代替できない「人間の知恵」です。</p>
+      <p>そして今、その現場力にAIの革新を掛け合わせることで、従来のコンサルティングでは到達できなかった深さと速さで、企業の本質的な課題を解決します。</p>
+      <p style="color:#E8B84A;font-size:13px;margin-top:24px;">Where Human Wisdom Meets AI Power</p>
+    </div>
+    <div class="trust-facts">
+      <div class="trust-fact">
+        <h4>現場力</h4>
+        <p>30年のディレクション経験。机上の空論ではなく、現場で何が起きるかを肌で知っている。</p>
+      </div>
+      <div class="trust-fact">
+        <h4>伝統のDNA</h4>
+        <p>創業108年・本田屋かすてら本舗の家訓「伝統を守り続けるための革新」がAHIの原点。</p>
+      </div>
+      <div class="trust-fact">
+        <h4>AI実践者</h4>
+        <p>理論ではなく、自らAIオールインで生活する実践者。毎日AIを使い倒しているから語れる。</p>
+      </div>
+      <div class="trust-fact">
+        <h4>成長企業ネットワーク</h4>
+        <p>国のプロジェクトに参画した成長意欲のある約400社の実名リストを保有。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<div class="contact-band" id="contact">
+  <div class="contact-inner">
+    <div class="reveal">
+      <span class="label">Contact</span>
+      <h2>まずは、対話から。</h2>
+      <p>御社の「本当の課題」を一緒に見つけましょう。<br>初期診断から始めることで、投資対効果を確認した上で次のステップに進めます。</p>
+      <div class="contact-grid">
+        <div class="contact-item">
+          <div class="ci-label">Email</div>
+          <div class="ci-value"><a href="mailto:info@ahi-consulting.jp">info@ahi-consulting.jp</a></div>
+        </div>
+        <div class="contact-item">
+          <div class="ci-label">Location</div>
+          <div class="ci-value">福岡県福岡市博多区</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <p>&copy; 2026 AHI — Artificial Human Intelligence</p>
+</footer>
+
+<script>
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+function toggleMenu() {
+  document.getElementById('navLinks').classList.toggle('open');
+}
+function closeMenu() {
+  document.getElementById('navLinks').classList.remove('open');
+}
+
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12, rootMargin: '0px 0px -30px 0px' });
+reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
