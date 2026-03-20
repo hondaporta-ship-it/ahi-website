@@ -55,7 +55,21 @@ nav.scrolled {
   gap: 10px;
   text-decoration: none;
 }
-.nav-logo svg { width: 28px; height: 28px; }
+.nav-logo svg { width: 32px; height: 32px; }
+.unicorn-white {
+  fill: none;
+  stroke: rgba(255,255,255,0.85);
+  stroke-width: 2.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.horn-gold {
+  fill: none;
+  stroke: #E8B84A;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
 .nav-logo-text {
   font-family: 'Sora', sans-serif;
   font-size: 18px;
@@ -120,9 +134,10 @@ nav.scrolled {
 }
 .hero-content { position: relative; z-index: 1; }
 .hero-icon {
-  width: 90px;
-  height: 90px;
-  margin-bottom: 32px;
+  width: 140px;
+  height: 140px;
+  margin-bottom: 40px;
+  filter: drop-shadow(0 0 30px rgba(232,184,74,0.3));
   opacity: 0;
   animation: fadeUp 1s 0.2s forwards;
 }
@@ -486,8 +501,9 @@ footer {
 <!-- Navigation -->
 <nav id="navbar">
   <a href="#hero" class="nav-logo">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1231.08 1159.4">
-      <g><path fill="#E8B84A" d="M300.83,668.6c0-254.92,138.09-349.08,256.33-352.25,56.71-1.51,111.12,17.07,153.29,52.35,38,31.8,62.76,75.23,71.45,124.23h308.48C1050.4,210.66,820.42,0,548.31,0,246,0,0,260,0,579.66S246,1159.4,548.31,1159.4a529,529,0,0,0,88.17-7.5l.47-.08a493,493,0,0,1-52.29-19.61C412.24,1054.4,300.83,872.42,300.83,668.6Z"/><path fill="#E8B84A" d="M1123,492.93h108C1193.93,232.41,992.28,28.19,741.9,2.74,941.16,76.84,1092.05,262.71,1123,492.93Z"/><rect fill="#E8B84A" x="771.24" y="666.46" width="209.55" height="100.63"/><path fill="#E8B84A" d="M637.12,857.68c56,32.88,126.62,47.31,209.56,42.56V799.33H637.12Z"/><path fill="#E8B84A" d="M1013,666.46V799.33H878.92V929.9a614.55,614.55,0,0,1-63.59,3.46c-161,.08-246.39-72.94-290.64-138.3-80.35-118.64-75-289.91-23.45-387,13.75-26,30.28-45.84,48.6-59C448,356,333.08,442.92,333.08,668.6c0,191.18,104,361.62,264.85,434.23,128.07,57.79,269.89,43.27,389.69-37.37l.44-.29c3.3-2.24,6.58-4.56,9.86-6.89,122.93-89,210-229.48,233.16-391.82Z"/></g>
+    <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+      <path class="unicorn-white" d="M22 44 Q15 38 16 30 Q17 22 24 18 L28 18 Q36 16 40 20 Q44 24 42 32 Q40 40 32 44 Q28 46 22 44Z"/>
+      <path class="horn-gold" d="M24 18 L28 8 L30 20"/>
     </svg>
     <span class="nav-logo-text"><span class="a">A</span><span class="h">H</span><span class="i">I</span></span>
   </a>
@@ -506,8 +522,9 @@ footer {
 <!-- Hero -->
 <section class="hero" id="hero">
   <div class="hero-content">
-    <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1231.08 1159.4">
-      <g><path fill="#E8B84A" d="M300.83,668.6c0-254.92,138.09-349.08,256.33-352.25,56.71-1.51,111.12,17.07,153.29,52.35,38,31.8,62.76,75.23,71.45,124.23h308.48C1050.4,210.66,820.42,0,548.31,0,246,0,0,260,0,579.66S246,1159.4,548.31,1159.4a529,529,0,0,0,88.17-7.5l.47-.08a493,493,0,0,1-52.29-19.61C412.24,1054.4,300.83,872.42,300.83,668.6Z"/><path fill="#E8B84A" d="M1123,492.93h108C1193.93,232.41,992.28,28.19,741.9,2.74,941.16,76.84,1092.05,262.71,1123,492.93Z"/><rect fill="#E8B84A" x="771.24" y="666.46" width="209.55" height="100.63"/><path fill="#E8B84A" d="M637.12,857.68c56,32.88,126.62,47.31,209.56,42.56V799.33H637.12Z"/><path fill="#E8B84A" d="M1013,666.46V799.33H878.92V929.9a614.55,614.55,0,0,1-63.59,3.46c-161,.08-246.39-72.94-290.64-138.3-80.35-118.64-75-289.91-23.45-387,13.75-26,30.28-45.84,48.6-59C448,356,333.08,442.92,333.08,668.6c0,191.18,104,361.62,264.85,434.23,128.07,57.79,269.89,43.27,389.69-37.37l.44-.29c3.3-2.24,6.58-4.56,9.86-6.89,122.93-89,210-229.48,233.16-391.82Z"/></g>
+    <svg class="hero-icon" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+      <path class="unicorn-white" d="M22 44 Q15 38 16 30 Q17 22 24 18 L28 18 Q36 16 40 20 Q44 24 42 32 Q40 40 32 44 Q28 46 22 44Z" style="stroke-width:1.5;"/>
+      <path class="horn-gold" d="M24 18 L28 8 L30 20" style="stroke-width:1.8;"/>
     </svg>
     <h1 class="hero-title"><span class="a">A</span><span class="h">H</span><span class="i">I</span></h1>
     <p class="hero-subtitle">ARTIFICIAL HUMAN INTELLIGENCE</p>
