@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AHI — Artificial Human Intelligence</title>
+<meta name="description" content="AHI - Where Human Wisdom Meets AI Power. 伝統と現場力と革新で、御社の本質的な課題を解決する。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ===== Reset & Base ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: 'Zen Kaku Gothic New', 'Hiragino Kaku Gothic ProN', sans-serif;
+  background: #1a1a1f;
+  color: #e0e0e0;
+  line-height: 1.8;
+  overflow-x: hidden;
+}
+
+/* ===== Typography ===== */
+h1, h2, h3, h4 { font-family: 'Sora', 'Zen Kaku Gothic New', sans-serif; }
+.section-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: #E8B84A;
+  margin-bottom: 12px;
+}
+
+/* ===== Navigation ===== */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 18px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.3s, box-shadow 0.3s;
+}
+nav.scrolled {
+  background: rgba(26, 26, 31, 0.95);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 1px 20px rgba(0,0,0,0.3);
+}
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+.nav-logo svg { width: 28px; height: 28px; }
+.nav-logo-text {
+  font-family: 'Sora', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+.nav-logo-text .a { color: #E8685A; }
+.nav-logo-text .h { color: #7BC67E; }
+.nav-logo-text .i { color: #5B9BD5; }
+.nav-links { display: flex; gap: 28px; list-style: none; }
+.nav-links a {
+  color: #aaa;
+  text-decoration: none;
+  font-size: 13px;
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  letter-spacing: 1px;
+  transition: color 0.3s;
+}
+.nav-links a:hover { color: #E8B84A; }
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 4px;
+}
+.nav-hamburger span {
+  width: 24px;
+  height: 2px;
+  background: #e0e0e0;
+  transition: transform 0.3s, opacity 0.3s;
+}
+
+/* ===== Hero ===== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 120px 24px 80px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at 30% 50%, rgba(232,184,74,0.06) 0%, transparent 50%),
+              radial-gradient(ellipse at 70% 30%, rgba(91,155,213,0.04) 0%, transparent 50%);
+  animation: heroGlow 12s ease-in-out infinite alternate;
+}
+@keyframes heroGlow {
+  0% { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(-3%, 2%) scale(1.05); }
+}
+.hero-content { position: relative; z-index: 1; }
+.hero-icon {
+  width: 90px;
+  height: 90px;
+  margin-bottom: 32px;
+  opacity: 0;
+  animation: fadeUp 1s 0.2s forwards;
+}
+.hero-title {
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  font-weight: 800;
+  letter-spacing: 8px;
+  margin-bottom: 8px;
+  opacity: 0;
+  animation: fadeUp 1s 0.4s forwards;
+}
+.hero-title .a { color: #E8685A; }
+.hero-title .h { color: #7BC67E; }
+.hero-title .i { color: #5B9BD5; }
+.hero-subtitle {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(11px, 1.5vw, 14px);
+  letter-spacing: 6px;
+  color: #888;
+  margin-bottom: 40px;
+  opacity: 0;
+  animation: fadeUp 1s 0.6s forwards;
+}
+.hero-tagline {
+  font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+  font-weight: 300;
+  color: #E8B84A;
+  margin-bottom: 16px;
+  opacity: 0;
+  animation: fadeUp 1s 0.8s forwards;
+}
+.hero-catchphrase {
+  font-size: clamp(0.9rem, 2vw, 1.15rem);
+  color: #999;
+  max-width: 600px;
+  margin: 0 auto 48px;
+  opacity: 0;
+  animation: fadeUp 1s 1s forwards;
+}
+.hero-cta {
+  display: inline-block;
+  padding: 14px 42px;
+  border: 1px solid #E8B84A;
+  color: #E8B84A;
+  text-decoration: none;
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  font-size: 14px;
+  letter-spacing: 2px;
+  transition: all 0.3s;
+  opacity: 0;
+  animation: fadeUp 1s 1.2s forwards;
+}
+.hero-cta:hover {
+  background: #E8B84A;
+  color: #1a1a1f;
+}
+.hero-scroll {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 40px;
+  border: 2px solid #444;
+  border-radius: 12px;
+  opacity: 0;
+  animation: fadeUp 1s 1.4s forwards;
+}
+.hero-scroll::after {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px;
+  height: 8px;
+  background: #E8B84A;
+  border-radius: 2px;
+  animation: scrollDot 2s infinite;
+}
+@keyframes scrollDot {
+  0%, 100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  50% { opacity: 0.3; transform: translateX(-50%) translateY(12px); }
+}
+
+/* ===== Sections ===== */
+section {
+  padding: 100px 24px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+section h2 {
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: #f0f0f0;
+}
+section p {
+  color: #bbb;
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+.divider {
+  width: 48px;
+  height: 2px;
+  background: #E8B84A;
+  margin-bottom: 40px;
+}
+
+/* ===== About ===== */
+.about-oneliner {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  color: #e0e0e0;
+  border-left: 3px solid #E8B84A;
+  padding-left: 20px;
+  margin-bottom: 48px;
+  line-height: 2;
+}
+.comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 40px;
+}
+.comparison-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 28px;
+  transition: transform 0.3s, border-color 0.3s;
+}
+.comparison-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(232,184,74,0.2);
+}
+.comparison-card.highlight {
+  border-color: rgba(232,184,74,0.3);
+  background: rgba(232,184,74,0.04);
+}
+.comparison-card h4 {
+  font-size: 14px;
+  margin-bottom: 12px;
+  color: #E8B84A;
+}
+.comparison-card p {
+  font-size: 13px;
+  color: #999;
+  margin-bottom: 0;
+}
+.comparison-card.highlight p { color: #ccc; }
+
+/* ===== Services ===== */
+.service-flow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 20px;
+  margin-top: 40px;
+}
+.service-step {
+  text-align: center;
+  padding: 32px 16px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 12px;
+  position: relative;
+  transition: transform 0.3s, border-color 0.3s;
+}
+.service-step:hover {
+  transform: translateY(-4px);
+  border-color: rgba(232,184,74,0.3);
+}
+.step-num {
+  font-family: 'Sora', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: rgba(232,184,74,0.2);
+  margin-bottom: 12px;
+}
+.service-step h4 {
+  font-size: 14px;
+  color: #E8B84A;
+  margin-bottom: 8px;
+}
+.service-step p {
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 0;
+  line-height: 1.6;
+}
+
+/* ===== Story ===== */
+.timeline {
+  position: relative;
+  margin-top: 48px;
+  padding-left: 32px;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, #E8B84A, rgba(232,184,74,0.1));
+}
+.timeline-item {
+  position: relative;
+  margin-bottom: 48px;
+  padding-left: 24px;
+}
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -37px;
+  top: 6px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #E8B84A;
+  box-shadow: 0 0 16px rgba(232,184,74,0.3);
+}
+.timeline-era {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: #E8B84A;
+  margin-bottom: 6px;
+}
+.timeline-item h4 {
+  font-size: 17px;
+  color: #f0f0f0;
+  margin-bottom: 8px;
+}
+.timeline-item p {
+  font-size: 14px;
+  color: #999;
+  margin-bottom: 0;
+}
+
+/* ===== Strengths ===== */
+.strengths-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+  margin-top: 40px;
+}
+.strength-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 32px 24px;
+  transition: transform 0.3s, border-color 0.3s;
+}
+.strength-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(232,184,74,0.3);
+}
+.strength-icon {
+  font-size: 28px;
+  margin-bottom: 16px;
+}
+.strength-card h4 {
+  font-size: 15px;
+  color: #E8B84A;
+  margin-bottom: 10px;
+}
+.strength-card p {
+  font-size: 13px;
+  color: #999;
+  margin-bottom: 0;
+}
+
+/* ===== Contact ===== */
+.contact-section {
+  text-align: center;
+  padding: 120px 24px;
+}
+.contact-section h2 { margin-bottom: 16px; }
+.contact-section .divider { margin: 0 auto 40px; }
+.contact-info {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: left;
+}
+.contact-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #bbb;
+  font-size: 15px;
+}
+.contact-row .icon { color: #E8B84A; font-size: 18px; }
+.contact-row a {
+  color: #E8B84A;
+  text-decoration: none;
+  transition: opacity 0.3s;
+}
+.contact-row a:hover { opacity: 0.7; }
+
+/* ===== Footer ===== */
+footer {
+  text-align: center;
+  padding: 40px 24px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  color: #666;
+  font-size: 12px;
+  font-family: 'Montserrat', sans-serif;
+  letter-spacing: 1px;
+}
+
+/* ===== Animations ===== */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s, transform 0.8s;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== Mobile ===== */
+@media (max-width: 768px) {
+  nav { padding: 14px 20px; }
+  .nav-links { display: none; }
+  .nav-links.open {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(26,26,31,0.98);
+    justify-content: center;
+    align-items: center;
+    gap: 32px;
+    z-index: 999;
+  }
+  .nav-links.open a { font-size: 18px; color: #e0e0e0; }
+  .nav-hamburger { display: flex; z-index: 1001; }
+  section { padding: 72px 20px; }
+  .comparison { grid-template-columns: 1fr; }
+  .service-flow { grid-template-columns: 1fr 1fr; }
+  .hero { padding: 100px 20px 60px; }
+  .hero-icon { width: 64px; height: 64px; }
+}
+@media (max-width: 480px) {
+  .service-flow { grid-template-columns: 1fr; }
+  .strengths-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1231.08 1159.4">
+      <g><path fill="#E8B84A" d="M300.83,668.6c0-254.92,138.09-349.08,256.33-352.25,56.71-1.51,111.12,17.07,153.29,52.35,38,31.8,62.76,75.23,71.45,124.23h308.48C1050.4,210.66,820.42,0,548.31,0,246,0,0,260,0,579.66S246,1159.4,548.31,1159.4a529,529,0,0,0,88.17-7.5l.47-.08a493,493,0,0,1-52.29-19.61C412.24,1054.4,300.83,872.42,300.83,668.6Z"/><path fill="#E8B84A" d="M1123,492.93h108C1193.93,232.41,992.28,28.19,741.9,2.74,941.16,76.84,1092.05,262.71,1123,492.93Z"/><rect fill="#E8B84A" x="771.24" y="666.46" width="209.55" height="100.63"/><path fill="#E8B84A" d="M637.12,857.68c56,32.88,126.62,47.31,209.56,42.56V799.33H637.12Z"/><path fill="#E8B84A" d="M1013,666.46V799.33H878.92V929.9a614.55,614.55,0,0,1-63.59,3.46c-161,.08-246.39-72.94-290.64-138.3-80.35-118.64-75-289.91-23.45-387,13.75-26,30.28-45.84,48.6-59C448,356,333.08,442.92,333.08,668.6c0,191.18,104,361.62,264.85,434.23,128.07,57.79,269.89,43.27,389.69-37.37l.44-.29c3.3-2.24,6.58-4.56,9.86-6.89,122.93-89,210-229.48,233.16-391.82Z"/></g>
+    </svg>
+    <span class="nav-logo-text"><span class="a">A</span><span class="h">H</span><span class="i">I</span></span>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about" onclick="closeMenu()">About</a></li>
+    <li><a href="#services" onclick="closeMenu()">サービス</a></li>
+    <li><a href="#story" onclick="closeMenu()">ストーリー</a></li>
+    <li><a href="#strengths" onclick="closeMenu()">強み</a></li>
+    <li><a href="#contact" onclick="closeMenu()">お問い合わせ</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" onclick="toggleMenu()" aria-label="メニュー">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="hero">
+  <div class="hero-content">
+    <svg class="hero-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1231.08 1159.4">
+      <g><path fill="#E8B84A" d="M300.83,668.6c0-254.92,138.09-349.08,256.33-352.25,56.71-1.51,111.12,17.07,153.29,52.35,38,31.8,62.76,75.23,71.45,124.23h308.48C1050.4,210.66,820.42,0,548.31,0,246,0,0,260,0,579.66S246,1159.4,548.31,1159.4a529,529,0,0,0,88.17-7.5l.47-.08a493,493,0,0,1-52.29-19.61C412.24,1054.4,300.83,872.42,300.83,668.6Z"/><path fill="#E8B84A" d="M1123,492.93h108C1193.93,232.41,992.28,28.19,741.9,2.74,941.16,76.84,1092.05,262.71,1123,492.93Z"/><rect fill="#E8B84A" x="771.24" y="666.46" width="209.55" height="100.63"/><path fill="#E8B84A" d="M637.12,857.68c56,32.88,126.62,47.31,209.56,42.56V799.33H637.12Z"/><path fill="#E8B84A" d="M1013,666.46V799.33H878.92V929.9a614.55,614.55,0,0,1-63.59,3.46c-161,.08-246.39-72.94-290.64-138.3-80.35-118.64-75-289.91-23.45-387,13.75-26,30.28-45.84,48.6-59C448,356,333.08,442.92,333.08,668.6c0,191.18,104,361.62,264.85,434.23,128.07,57.79,269.89,43.27,389.69-37.37l.44-.29c3.3-2.24,6.58-4.56,9.86-6.89,122.93-89,210-229.48,233.16-391.82Z"/></g>
+    </svg>
+    <h1 class="hero-title"><span class="a">A</span><span class="h">H</span><span class="i">I</span></h1>
+    <p class="hero-subtitle">ARTIFICIAL HUMAN INTELLIGENCE</p>
+    <p class="hero-tagline">Where Human Wisdom Meets AI Power</p>
+    <p class="hero-catchphrase">伝統と現場力と革新</p>
+    <a href="#contact" class="hero-cta">お問い合わせ</a>
+  </div>
+  <div class="hero-scroll"></div>
+</section>
+
+<!-- About -->
+<section id="about">
+  <div class="reveal">
+    <p class="section-label">About</p>
+    <h2>FDEという新しいモデル</h2>
+    <div class="divider"></div>
+    <p class="about-oneliner">108年続くカステラ屋の血を引き、30年の現場力を持ったFDEが、<br>AIという革新で御社の本質的な課題を解決します。</p>
+    <p>AHIは、パランティア（Palantir）が確立した<strong>FDE（Forward Deployed Engineer）</strong>モデルの日本版です。顧客の現場に深く入り込み、業務課題の定義からソリューションの実装・運用まで一気通貫で担います。</p>
+    <p>「開発者 × コンサルタント × プロジェクトリーダー」を兼ねる存在として、仕様書通りに作って終わりではなく、<strong>課題そのものを再定義しながら仕組みを構築</strong>します。</p>
+  </div>
+
+  <div class="comparison reveal">
+    <div class="comparison-card">
+      <h4>大手コンサル</h4>
+      <p>月額500万円〜。レポートを納品するが、現場には入らない。ノーと言わず、本質を見失いがち。</p>
+    </div>
+    <div class="comparison-card">
+      <h4>SIer</h4>
+      <p>技術寄りで業務理解が浅い。ウォーターフォール型で変化に弱い。</p>
+    </div>
+    <div class="comparison-card">
+      <h4>AIベンチャー</h4>
+      <p>プロダクト型でカスタム対応が弱い。御社の業務に合わせるのではなく、プロダクトに合わせることを求める。</p>
+    </div>
+    <div class="comparison-card highlight">
+      <h4>AHI</h4>
+      <p>月額100〜300万円。現場密着のFDE。対等な関係で、本質的な課題のみを解決。必要なことにノーと言える信頼。</p>
+    </div>
+  </div>
+</section>
+
+<!-- Services -->
+<section id="services">
+  <div class="reveal">
+    <p class="section-label">Services</p>
+    <h2>5つのステップで業務を変える</h2>
+    <div class="divider"></div>
+    <p>ツール導入で終わらない。現場の「当たり前」を変えるところまで伴走します。</p>
+  </div>
+
+  <div class="service-flow reveal">
+    <div class="service-step">
+      <div class="step-num">01</div>
+      <h4>初期診断</h4>
+      <p>2週間の業務診断で「本当のボトルネック」を特定</p>
+    </div>
+    <div class="service-step">
+      <div class="step-num">02</div>
+      <h4>業務分析</h4>
+      <p>現場ヒアリング＋データ分析で課題を構造化</p>
+    </div>
+    <div class="service-step">
+      <div class="step-num">03</div>
+      <h4>AI戦略設計</h4>
+      <p>「どこにAIを入れると最大効果か」を設計</p>
+    </div>
+    <div class="service-step">
+      <div class="step-num">04</div>
+      <h4>実装・PoC</h4>
+      <p>小さく始めて効果を検証。成功パターンを拡大</p>
+    </div>
+    <div class="service-step">
+      <div class="step-num">05</div>
+      <h4>定着支援</h4>
+      <p>社員教育・マニュアル整備・運用フロー構築まで</p>
+    </div>
+  </div>
+</section>
+
+<!-- Story -->
+<section id="story">
+  <div class="reveal">
+    <p class="section-label">Story</p>
+    <h2>なぜAHIをやるのか</h2>
+    <div class="divider"></div>
+  </div>
+
+  <div class="timeline reveal">
+    <div class="timeline-item">
+      <p class="timeline-era">1918 — 創業</p>
+      <h4>本田屋かすてら本舗</h4>
+      <p>長崎県南島原市口之津町で創業108年。家訓は「まじめで嘘のないお菓子」「伝統を守り続けるための革新」。この血がAHIのDNAです。</p>
+    </div>
+    <div class="timeline-item">
+      <p class="timeline-era">1996 — 30年間</p>
+      <h4>イベントディレクターとして</h4>
+      <p>30年間、数千の現場を指揮。段取り力、人を動かす力、「現場の空気を読む力」を磨き続けた。この現場力が、机上の空論では終わらないFDEの原動力。</p>
+    </div>
+    <div class="timeline-item">
+      <p class="timeline-era">2025 — 転機</p>
+      <h4>56歳、AIにオールイン</h4>
+      <p>AIに出会い、人生が激変。自らAIオールインで生活し、仕事もプライベートもすべてAIと共に。理論ではなく「実践者」として語れる覚悟。</p>
+    </div>
+    <div class="timeline-item">
+      <p class="timeline-era">2026 — 創業</p>
+      <h4>AHI — Artificial Human Intelligence</h4>
+      <p>「伝統と現場力と革新」を掲げ、日本の中堅企業のAI変革パートナーとして始動。まじめで嘘のない仕事で、本質的な課題だけを解決する。</p>
+    </div>
+  </div>
+</section>
+
+<!-- Strengths -->
+<section id="strengths">
+  <div class="reveal">
+    <p class="section-label">Strengths</p>
+    <h2>AHIが選ばれる理由</h2>
+    <div class="divider"></div>
+  </div>
+
+  <div class="strengths-grid reveal">
+    <div class="strength-card">
+      <div class="strength-icon">🔥</div>
+      <h4>現場を知っている</h4>
+      <p>30年のディレクション経験。机上の空論ではなく、現場で何が起きるかを肌で知っている。</p>
+    </div>
+    <div class="strength-card">
+      <div class="strength-icon">🤝</div>
+      <h4>対等な関係</h4>
+      <p>御用聞きではない。必要ないことには「ノー」と言える。本質を見抜く目を持っている。</p>
+    </div>
+    <div class="strength-card">
+      <div class="strength-icon">⚡</div>
+      <h4>AIの実践者</h4>
+      <p>自らAIオールインで生活するFDE。理論ではなく、毎日AIを使い倒している実践者が伴走する。</p>
+    </div>
+    <div class="strength-card">
+      <div class="strength-icon">💰</div>
+      <h4>価格のスイートスポット</h4>
+      <p>大手コンサルには手が出ないが、フリーランスでは不安。月100〜300万円で深く入り込む。</p>
+    </div>
+    <div class="strength-card">
+      <div class="strength-icon">🏯</div>
+      <h4>108年の伝統</h4>
+      <p>「伝統を守り続けるための革新」。100年以上続く家業の精神が、AHIの仕事の根底にある。</p>
+    </div>
+    <div class="strength-card">
+      <div class="strength-icon">🎯</div>
+      <h4>本質課題のみ</h4>
+      <p>Excelの使い方は教えない。倉庫の整理もしない。御社の根本問題にだけフォーカスする。</p>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section class="contact-section" id="contact">
+  <div class="reveal">
+    <p class="section-label">Contact</p>
+    <h2>お問い合わせ</h2>
+    <div class="divider"></div>
+    <p style="margin-bottom: 40px;">まずは初期診断から。御社の「本当の課題」を一緒に見つけましょう。</p>
+    <div class="contact-info">
+      <div class="contact-row">
+        <span class="icon">✉</span>
+        <a href="mailto:info@ahi-consulting.jp">info@ahi-consulting.jp</a>
+      </div>
+      <div class="contact-row">
+        <span class="icon">📍</span>
+        <span>福岡県福岡市博多区</span>
+      </div>
+      <div class="contact-row">
+        <span class="icon">🌐</span>
+        <span>AHI — Artificial Human Intelligence</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p>&copy; 2026 AHI — Artificial Human Intelligence. All rights reserved.</p>
+</footer>
+
+<script>
+// Navbar scroll effect
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// Mobile menu
+function toggleMenu() {
+  document.getElementById('navLinks').classList.toggle('open');
+}
+function closeMenu() {
+  document.getElementById('navLinks').classList.remove('open');
+}
+
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
