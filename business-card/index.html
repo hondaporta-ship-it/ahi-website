@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AHI 名刺ジェネレーター</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Sora:wght@300;400;500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  background: #f0f0f3;
+  color: #333;
+  min-height: 100vh;
+}
+
+.app-header {
+  text-align: center;
+  padding: 40px 20px 20px;
+}
+.app-header h1 {
+  font-family: 'Sora', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #333;
+}
+.app-header p {
+  font-size: 13px;
+  color: #999;
+  margin-top: 6px;
+}
+
+.app-layout {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+/* === Form === */
+.form-panel {
+  background: #fff;
+  border: 1px solid #e4e4e8;
+  border-radius: 16px;
+  padding: 28px 24px;
+}
+.form-panel h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #bbb;
+  margin-bottom: 20px;
+}
+.field { margin-bottom: 16px; }
+.field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: #666;
+  margin-bottom: 5px;
+}
+.field input, .field select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  outline: none;
+  transition: border 0.2s;
+}
+.field input:focus, .field select:focus {
+  border-color: #E8B84A;
+}
+.btn-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 24px;
+}
+.btn {
+  flex: 1;
+  padding: 12px 0;
+  border: none;
+  border-radius: 10px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-primary {
+  background: linear-gradient(145deg, #333340, #1e1e28);
+  color: #E8B84A;
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+.btn-secondary {
+  background: #f5f5f5;
+  color: #666;
+  border: 1px solid #e0e0e0;
+}
+.btn-secondary:hover { background: #eee; }
+
+/* === Preview === */
+.preview-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+.preview-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #bbb;
+}
+
+/* === Card (91mm x 55mm = 3.58in x 2.17in at 96dpi ≈ 344px x 208px) === */
+.card-container {
+  perspective: 800px;
+}
+.card-flipper {
+  position: relative;
+  width: 344px;
+  height: 208px;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  cursor: pointer;
+}
+.card-flipper.flipped { transform: rotateY(180deg); }
+
+.card-front, .card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
+}
+
+/* Front */
+.card-front {
+  background: #fff;
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.card-front-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.card-logo-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(145deg, #333340, #1e1e28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.card-logo-icon svg { width: 20px; height: 20px; }
+.card-ahi {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 4px;
+}
+.card-ahi .a { color: #ff6b6b; }
+.card-ahi .h { background: linear-gradient(135deg, #ffd93d, #6bcb77); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.card-ahi .i { color: #4d96ff; }
+
+.card-person {
+  margin-top: auto;
+}
+.card-name-ja {
+  font-size: 16px;
+  font-weight: 700;
+  color: #222;
+  letter-spacing: 2px;
+}
+.card-name-en {
+  font-family: 'Poppins', sans-serif;
+  font-size: 9px;
+  color: #aaa;
+  letter-spacing: 1px;
+  margin-top: 1px;
+}
+.card-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 9px;
+  color: #999;
+  margin-top: 4px;
+  letter-spacing: 0.5px;
+}
+
+.card-front-divider {
+  width: 32px;
+  height: 2px;
+  background: linear-gradient(90deg, #ff6b6b, #ffd93d, #6bcb77, #4d96ff);
+  border-radius: 1px;
+  margin: 8px 0;
+}
+
+.card-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.card-contact span {
+  font-size: 8px;
+  color: #999;
+  letter-spacing: 0.3px;
+}
+
+/* Back */
+.card-back {
+  background: linear-gradient(145deg, #28282f, #1a1a22);
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+.card-back-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.card-back-icon svg { width: 34px; height: 34px; }
+.card-back-ahi {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 6px;
+}
+.card-back-ahi .a { color: #ff7b7b; }
+.card-back-ahi .h { background: linear-gradient(135deg, #ffe066, #7dd88a); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.card-back-ahi .i { color: #6aadff; }
+.card-back-sub {
+  font-family: 'Poppins', sans-serif;
+  font-size: 8px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+}
+.card-back-tagline {
+  font-family: 'Sora', sans-serif;
+  font-size: 9px;
+  color: rgba(232,184,74,0.5);
+  font-weight: 300;
+}
+
+.flip-hint {
+  font-size: 11px;
+  color: #bbb;
+}
+
+/* Unicorn SVG classes */
+.unicorn-white { fill: none; stroke: rgba(255,255,255,0.85); stroke-width: 2.3; stroke-linecap: round; stroke-linejoin: round; }
+.horn-gold { fill: none; stroke: #e8b84a; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Print styles */
+@media print {
+  body { background: #fff; }
+  .app-header, .form-panel, .preview-label, .flip-hint, .btn-row { display: none; }
+  .app-layout { display: block; }
+  .card-container { margin: 0; }
+  .card-front, .card-back { box-shadow: 1px 1px 3px rgba(0,0,0,0.1); }
+}
+
+@media (max-width: 768px) {
+  .app-layout { grid-template-columns: 1fr; }
+  .card-flipper { width: 300px; height: 182px; }
+}
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <h1>🎴 AHI 名刺ジェネレーター</h1>
+  <p>情報を入力 → プレビュー → 印刷 / PDF保存</p>
+</div>
+
+<div class="app-layout">
+  <div class="form-panel">
+    <h2>名刺情報</h2>
+    <div class="field">
+      <label>氏名（日本語）</label>
+      <input type="text" id="nameJa" value="本田 英樹" oninput="updateCard()">
+    </div>
+    <div class="field">
+      <label>氏名（ローマ字）</label>
+      <input type="text" id="nameEn" value="Hideki Honda" oninput="updateCard()">
+    </div>
+    <div class="field">
+      <label>役職</label>
+      <input type="text" id="title" value="CEO / FDE — Forward Deployed Engineer" oninput="updateCard()">
+    </div>
+    <div class="field">
+      <label>Email</label>
+      <input type="email" id="email" value="info@ahi-consulting.jp" oninput="updateCard()">
+    </div>
+    <div class="field">
+      <label>電話番号</label>
+      <input type="tel" id="phone" value="092-XXX-XXXX" oninput="updateCard()">
+    </div>
+    <div class="field">
+      <label>携帯番号</label>
+      <input type="tel" id="mobile" value="090-XXX-XXXX" oninput="updateCard()">
+    </div>
+    <div class="field">
+      <label>住所</label>
+      <input type="text" id="address" value="福岡県福岡市博多区博多駅前3-18-6 博多テラス3F" oninput="updateCard()">
+    </div>
+    <div class="field">
+      <label>Webサイト</label>
+      <input type="url" id="website" value="https://ahi-consulting.jp" oninput="updateCard()">
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="window.print()">📄 PDF保存 / 印刷</button>
+      <button class="btn btn-secondary" onclick="flipCard()">🔄 裏面</button>
+    </div>
+  </div>
+
+  <div class="preview-panel">
+    <span class="preview-label">Preview — click card to flip</span>
+
+    <div class="card-container">
+      <div class="card-flipper" id="cardFlipper" onclick="flipCard()">
+        <!-- FRONT -->
+        <div class="card-front">
+          <div class="card-front-top">
+            <div class="card-logo-icon">
+              <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                <path class="unicorn-white" d="M22 44 Q15 38 16 30 Q17 22 24 18 L28 18 Q36 16 40 20 Q44 24 42 32 Q40 40 32 44 Q28 46 22 44Z"/>
+                <path class="horn-gold" d="M24 18 L28 8 L30 20"/>
+                <circle cx="34" cy="28" r="2.2" fill="white" opacity="0.9"/>
+                <circle cx="26" cy="10" r="1.8" fill="#e8b84a" opacity="0.9"/>
+                <circle cx="23" cy="14" r="1" fill="#e8b84a" opacity="0.5"/>
+              </svg>
+            </div>
+            <div class="card-ahi"><span class="a">A</span><span class="h">H</span><span class="i">I</span></div>
+          </div>
+
+          <div class="card-person">
+            <div class="card-name-ja" id="dispNameJa">本田 英樹</div>
+            <div class="card-name-en" id="dispNameEn">Hideki Honda</div>
+            <div class="card-title" id="dispTitle">CEO / FDE — Forward Deployed Engineer</div>
+          </div>
+
+          <div class="card-front-divider"></div>
+
+          <div class="card-contact">
+            <span id="dispEmail">✉ info@ahi-consulting.jp</span>
+            <span id="dispPhone">☎ 092-XXX-XXXX ／ 📱 090-XXX-XXXX</span>
+            <span id="dispAddress">📍 福岡県福岡市博多区博多駅前3-18-6 博多テラス3F</span>
+            <span id="dispWeb">🌐 https://ahi-consulting.jp</span>
+          </div>
+        </div>
+
+        <!-- BACK -->
+        <div class="card-back">
+          <div class="card-back-icon">
+            <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+              <path class="unicorn-white" d="M22 44 Q15 38 16 30 Q17 22 24 18 L28 18 Q36 16 40 20 Q44 24 42 32 Q40 40 32 44 Q28 46 22 44Z"/>
+              <path class="horn-gold" d="M24 18 L28 8 L30 20"/>
+              <circle cx="34" cy="28" r="2.2" fill="white" opacity="0.9"/>
+              <circle cx="26" cy="10" r="1.8" fill="#e8b84a" opacity="0.9"/>
+              <circle cx="23" cy="14" r="1" fill="#e8b84a" opacity="0.5"/>
+            </svg>
+          </div>
+          <div class="card-back-ahi"><span class="a">A</span><span class="h">H</span><span class="i">I</span></div>
+          <div class="card-back-sub">Artificial Human Intelligence</div>
+          <div class="card-back-tagline">Where Human Wisdom Meets AI Power</div>
+        </div>
+      </div>
+    </div>
+
+    <span class="flip-hint">👆 カードをクリックで裏返す</span>
+  </div>
+</div>
+
+<script>
+function updateCard() {
+  document.getElementById('dispNameJa').textContent = document.getElementById('nameJa').value;
+  document.getElementById('dispNameEn').textContent = document.getElementById('nameEn').value;
+  document.getElementById('dispTitle').textContent = document.getElementById('title').value;
+  document.getElementById('dispEmail').textContent = '✉ ' + document.getElementById('email').value;
+  const phone = document.getElementById('phone').value;
+  const mobile = document.getElementById('mobile').value;
+  document.getElementById('dispPhone').textContent = '☎ ' + phone + (mobile ? ' ／ 📱 ' + mobile : '');
+  document.getElementById('dispAddress').textContent = '📍 ' + document.getElementById('address').value;
+  document.getElementById('dispWeb').textContent = '🌐 ' + document.getElementById('website').value;
+}
+
+function flipCard() {
+  document.getElementById('cardFlipper').classList.toggle('flipped');
+}
+</script>
+</body>
+</html>

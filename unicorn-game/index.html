@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>🦄 AHI Unicorn Run</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #0e0e12;
+  overflow: hidden;
+  font-family: 'Helvetica Neue', sans-serif;
+  touch-action: none;
+  user-select: none;
+}
+canvas {
+  display: block;
+  margin: 0 auto;
+}
+#ui-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 10;
+}
+#start-screen, #gameover-screen {
+  text-align: center;
+  pointer-events: auto;
+}
+#start-screen h1 {
+  font-size: 48px;
+  color: #E8B84A;
+  margin-bottom: 8px;
+}
+#start-screen .subtitle {
+  font-size: 16px;
+  color: #888;
+  margin-bottom: 32px;
+}
+#gameover-screen h2 {
+  font-size: 36px;
+  color: #ff6b6b;
+  margin-bottom: 8px;
+}
+#gameover-screen .final-score {
+  font-size: 24px;
+  color: #E8B84A;
+  margin-bottom: 8px;
+}
+#gameover-screen .high-score {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 24px;
+}
+.play-btn {
+  padding: 16px 48px;
+  background: linear-gradient(145deg, #333340, #1e1e28);
+  color: #E8B84A;
+  border: 1px solid rgba(232,184,74,0.3);
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.play-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(232,184,74,0.15);
+  border-color: #E8B84A;
+}
+.controls-hint {
+  font-size: 12px;
+  color: #555;
+  margin-top: 16px;
+}
+#score-display {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  font-size: 28px;
+  font-weight: 800;
+  color: #E8B84A;
+  z-index: 5;
+  pointer-events: none;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<canvas id="game"></canvas>
+<div id="score-display" class="hidden">0</div>
+
+<div id="ui-overlay">
+  <div id="start-screen">
+    <h1>🦄 AHI Unicorn Run</h1>
+    <div class="subtitle">ユニコーンを走らせろ！</div>
+    <button class="play-btn" id="startBtn">▶ START</button>
+    <div class="controls-hint">スペース / タップ でジャンプ</div>
+  </div>
+
+  <div id="gameover-screen" class="hidden">
+    <h2>GAME OVER</h2>
+    <div class="final-score" id="finalScore">Score: 0</div>
+    <div class="high-score" id="highScore">Best: 0</div>
+    <button class="play-btn" id="restartBtn">🔄 RETRY</button>
+    <div class="controls-hint">スペース / タップ でリトライ</div>
+  </div>
+</div>
+
+<script>
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+
+// Responsive canvas
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+// Game state
+let state = 'start'; // start, playing, gameover
+let score = 0;
+let bestScore = parseInt(localStorage.getItem('ahi-unicorn-best') || '0');
+let frameCount = 0;
+let speed = 4;
+let groundY;
+
+// Unicorn
+const unicorn = {
+  x: 80,
+  y: 0,
+  w: 48,
+  h: 48,
+  vy: 0,
+  jumping: false,
+  rotation: 0,
+};
+
+// Obstacles
+let obstacles = [];
+let particles = [];
+let stars = [];
+let ground = [];
+
+// Init stars
+function initStars() {
+  stars = [];
+  for (let i = 0; i < 60; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height * 0.7,
+      size: Math.random() * 2 + 0.5,
+      twinkle: Math.random() * Math.PI * 2,
+      speed: Math.random() * 0.02 + 0.01,
+    });
+  }
+}
+
+// Init ground tiles
+function initGround() {
+  ground = [];
+  for (let x = 0; x < canvas.width + 60; x += 30) {
+    ground.push({ x, h: Math.random() * 4 + 2 });
+  }
+}
+
+function resetGame() {
+  groundY = canvas.height - 80;
+  unicorn.y = groundY - unicorn.h;
+  unicorn.vy = 0;
+  unicorn.jumping = false;
+  unicorn.rotation = 0;
+  obstacles = [];
+  particles = [];
+  score = 0;
+  frameCount = 0;
+  speed = 4;
+  initStars();
+  initGround();
+}
+
+// Draw unicorn (SVG-like with canvas)
+function drawUnicorn(x, y, w, h) {
+  ctx.save();
+  ctx.translate(x + w/2, y + h/2);
+  ctx.rotate(unicorn.rotation);
+
+  const s = w / 60; // scale factor from 60x60 viewBox
+
+  // Body
+  ctx.beginPath();
+  ctx.strokeStyle = 'rgba(255,255,255,0.85)';
+  ctx.lineWidth = 2.3 * s;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  // Approximate the body path
+  ctx.moveTo((-8) * s, (14) * s);
+  ctx.quadraticCurveTo((-15) * s, (8) * s, (-14) * s, (0) * s);
+  ctx.quadraticCurveTo((-13) * s, (-8) * s, (-6) * s, (-12) * s);
+  ctx.lineTo((-2) * s, (-12) * s);
+  ctx.quadraticCurveTo((6) * s, (-14) * s, (10) * s, (-10) * s);
+  ctx.quadraticCurveTo((14) * s, (-6) * s, (12) * s, (2) * s);
+  ctx.quadraticCurveTo((10) * s, (10) * s, (2) * s, (14) * s);
+  ctx.quadraticCurveTo((-2) * s, (16) * s, (-8) * s, (14) * s);
+  ctx.stroke();
+
+  // Horn
+  ctx.beginPath();
+  ctx.strokeStyle = '#E8B84A';
+  ctx.lineWidth = 2.5 * s;
+  ctx.moveTo((-6) * s, (-12) * s);
+  ctx.lineTo((-2) * s, (-22) * s);
+  ctx.lineTo((0) * s, (-10) * s);
+  ctx.stroke();
+
+  // White dot (decoration)
+  ctx.beginPath();
+  ctx.fillStyle = 'rgba(255,255,255,0.9)';
+  ctx.arc((4) * s, (-2) * s, 2.2 * s, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Horn sparkle
+  ctx.beginPath();
+  ctx.fillStyle = '#e8b84a';
+  ctx.globalAlpha = 0.9;
+  ctx.arc((-4) * s, (-20) * s, 1.8 * s, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.globalAlpha = 0.5;
+  ctx.beginPath();
+  ctx.arc((-7) * s, (-16) * s, 1 * s, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.globalAlpha = 1;
+
+  // Legs (when running)
+  const legPhase = frameCount * 0.15;
+  const leg1 = Math.sin(legPhase) * 5 * s;
+  const leg2 = Math.sin(legPhase + Math.PI) * 5 * s;
+  ctx.strokeStyle = 'rgba(255,255,255,0.6)';
+  ctx.lineWidth = 1.5 * s;
+  ctx.beginPath();
+  ctx.moveTo((-4) * s, (14) * s);
+  ctx.lineTo((-6 + leg1/s) * s, (22) * s);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo((4) * s, (14) * s);
+  ctx.lineTo((2 + leg2/s) * s, (22) * s);
+  ctx.stroke();
+
+  ctx.restore();
+}
+
+// Draw obstacle (red blocks with warning stripes)
+function drawObstacle(ob) {
+  // Shadow
+  ctx.fillStyle = 'rgba(255,50,50,0.1)';
+  ctx.fillRect(ob.x - 2, ob.y - 2, ob.w + 4, ob.h + 4);
+
+  // Main block
+  const grad = ctx.createLinearGradient(ob.x, ob.y, ob.x, ob.y + ob.h);
+  grad.addColorStop(0, '#ff4444');
+  grad.addColorStop(1, '#cc2222');
+  ctx.fillStyle = grad;
+  ctx.fillRect(ob.x, ob.y, ob.w, ob.h);
+
+  // Top stripe
+  ctx.fillStyle = 'rgba(255,255,255,0.15)';
+  ctx.fillRect(ob.x, ob.y, ob.w, 4);
+
+  // Warning icon
+  ctx.fillStyle = '#fff';
+  ctx.font = `${Math.min(ob.w, ob.h) * 0.5}px sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.fillText('⚠', ob.x + ob.w/2, ob.y + ob.h/2 + ob.h * 0.15);
+}
+
+// Particles
+function spawnParticles(x, y) {
+  for (let i = 0; i < 8; i++) {
+    particles.push({
+      x, y,
+      vx: (Math.random() - 0.5) * 6,
+      vy: (Math.random() - 1) * 4,
+      life: 1,
+      color: Math.random() > 0.5 ? '#E8B84A' : '#fff',
+      size: Math.random() * 4 + 2,
+    });
+  }
+}
+
+// Collision
+function checkCollision(ob) {
+  const padding = 6;
+  return unicorn.x + padding < ob.x + ob.w &&
+         unicorn.x + unicorn.w - padding > ob.x &&
+         unicorn.y + padding < ob.y + ob.h &&
+         unicorn.y + unicorn.h - padding > ob.y;
+}
+
+// Jump
+function jump() {
+  if (state === 'start') {
+    state = 'playing';
+    document.getElementById('start-screen').classList.add('hidden');
+    document.getElementById('score-display').classList.remove('hidden');
+    resetGame();
+    return;
+  }
+  if (state === 'gameover') {
+    state = 'playing';
+    document.getElementById('gameover-screen').classList.add('hidden');
+    document.getElementById('score-display').classList.remove('hidden');
+    resetGame();
+    return;
+  }
+  if (!unicorn.jumping) {
+    unicorn.vy = -12;
+    unicorn.jumping = true;
+    // Trail particles on jump
+    spawnParticles(unicorn.x, unicorn.y + unicorn.h);
+  }
+}
+
+// Input
+document.addEventListener('keydown', (e) => {
+  if (e.code === 'Space' || e.code === 'ArrowUp') {
+    e.preventDefault();
+    jump();
+  }
+});
+canvas.addEventListener('touchstart', (e) => { e.preventDefault(); jump(); });
+canvas.addEventListener('mousedown', (e) => {
+  if (state === 'playing') jump();
+});
+document.getElementById('startBtn').addEventListener('click', jump);
+document.getElementById('restartBtn').addEventListener('click', jump);
+
+// Game over
+function gameOver() {
+  state = 'gameover';
+  if (score > bestScore) {
+    bestScore = score;
+    localStorage.setItem('ahi-unicorn-best', bestScore.toString());
+  }
+  document.getElementById('finalScore').textContent = `Score: ${score}`;
+  document.getElementById('highScore').textContent = `Best: ${bestScore}`;
+  document.getElementById('gameover-screen').classList.remove('hidden');
+  document.getElementById('score-display').classList.add('hidden');
+  // Death particles
+  for (let i = 0; i < 20; i++) {
+    particles.push({
+      x: unicorn.x + unicorn.w/2,
+      y: unicorn.y + unicorn.h/2,
+      vx: (Math.random() - 0.5) * 10,
+      vy: (Math.random() - 0.5) * 10,
+      life: 1,
+      color: ['#ff6b6b', '#E8B84A', '#4d96ff', '#6bcb77', '#fff'][Math.floor(Math.random()*5)],
+      size: Math.random() * 6 + 2,
+    });
+  }
+}
+
+// Main loop
+function update() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  groundY = canvas.height - 80;
+
+  // Background gradient
+  const bgGrad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  bgGrad.addColorStop(0, '#0a0a10');
+  bgGrad.addColorStop(0.7, '#12121a');
+  bgGrad.addColorStop(1, '#1a1a24');
+  ctx.fillStyle = bgGrad;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Stars
+  stars.forEach(s => {
+    s.twinkle += s.speed;
+    const alpha = 0.3 + Math.sin(s.twinkle) * 0.3;
+    ctx.beginPath();
+    ctx.fillStyle = `rgba(255,255,255,${alpha})`;
+    ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+    ctx.fill();
+    if (state === 'playing') {
+      s.x -= speed * 0.2;
+      if (s.x < -5) s.x = canvas.width + 5;
+    }
+  });
+
+  // Ground
+  ctx.fillStyle = '#1e1e28';
+  ctx.fillRect(0, groundY, canvas.width, canvas.height - groundY);
+  // Ground line
+  ctx.strokeStyle = 'rgba(232,184,74,0.2)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(0, groundY);
+  ctx.lineTo(canvas.width, groundY);
+  ctx.stroke();
+  // Ground detail
+  ground.forEach(g => {
+    ctx.fillStyle = 'rgba(232,184,74,0.06)';
+    ctx.fillRect(g.x, groundY, 20, g.h);
+    if (state === 'playing') {
+      g.x -= speed;
+      if (g.x < -30) { g.x = canvas.width + 10; g.h = Math.random() * 4 + 2; }
+    }
+  });
+
+  if (state === 'playing') {
+    frameCount++;
+
+    // Speed up over time
+    speed = 4 + frameCount * 0.002;
+
+    // Unicorn physics
+    unicorn.vy += 0.6; // gravity
+    unicorn.y += unicorn.vy;
+
+    // Ground collision
+    if (unicorn.y >= groundY - unicorn.h) {
+      unicorn.y = groundY - unicorn.h;
+      unicorn.vy = 0;
+      unicorn.jumping = false;
+    }
+
+    // Rotation based on velocity
+    unicorn.rotation = unicorn.vy * 0.02;
+
+    // Spawn obstacles
+    const spawnRate = Math.max(60, 120 - frameCount * 0.05);
+    if (frameCount % Math.floor(spawnRate) === 0) {
+      const h = 30 + Math.random() * 40;
+      const w = 20 + Math.random() * 20;
+      obstacles.push({
+        x: canvas.width + 20,
+        y: groundY - h,
+        w, h,
+        scored: false,
+      });
+    }
+
+    // Update obstacles
+    obstacles.forEach(ob => {
+      ob.x -= speed;
+      // Score
+      if (!ob.scored && ob.x + ob.w < unicorn.x) {
+        ob.scored = true;
+        score++;
+        document.getElementById('score-display').textContent = score;
+        // Score particles
+        spawnParticles(unicorn.x + unicorn.w, unicorn.y);
+      }
+      // Collision
+      if (checkCollision(ob)) {
+        gameOver();
+      }
+    });
+
+    // Remove off-screen obstacles
+    obstacles = obstacles.filter(ob => ob.x > -60);
+
+    // Running trail particles
+    if (frameCount % 4 === 0 && !unicorn.jumping) {
+      particles.push({
+        x: unicorn.x,
+        y: unicorn.y + unicorn.h - 4,
+        vx: -Math.random() * 2,
+        vy: -Math.random() * 1,
+        life: 0.6,
+        color: '#E8B84A',
+        size: Math.random() * 2 + 1,
+      });
+    }
+  }
+
+  // Draw obstacles
+  obstacles.forEach(drawObstacle);
+
+  // Draw unicorn (always, for start/gameover too)
+  if (state === 'start') {
+    groundY = canvas.height - 80;
+    unicorn.y = groundY - unicorn.h;
+    // Idle bobbing
+    const bob = Math.sin(Date.now() * 0.003) * 4;
+    drawUnicorn(unicorn.x, unicorn.y + bob, unicorn.w, unicorn.h);
+  } else {
+    drawUnicorn(unicorn.x, unicorn.y, unicorn.w, unicorn.h);
+  }
+
+  // Particles
+  particles.forEach(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.1;
+    p.life -= 0.025;
+    ctx.globalAlpha = Math.max(0, p.life);
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+    ctx.fill();
+  });
+  ctx.globalAlpha = 1;
+  particles = particles.filter(p => p.life > 0);
+
+  requestAnimationFrame(update);
+}
+
+resetGame();
+initStars();
+update();
+</script>
+</body>
+</html>
