@@ -71,7 +71,9 @@ function doJump() {
 document.addEventListener('keydown', e => {
   if (e.code === 'Space' || e.code === 'ArrowUp') { e.preventDefault(); doJump(); }
 });
-document.addEventListener('pointerdown', e => { e.preventDefault(); doJump(); });
+document.addEventListener('click', e => { doJump(); });
+document.addEventListener('touchstart', e => { e.preventDefault(); doJump(); }, {passive: false});
+document.addEventListener('mousedown', e => { doJump(); });
 
 // Draw unicorn at (x, y)
 function drawUni(x, y) {
