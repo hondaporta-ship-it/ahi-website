@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🕐 AHI 現場タイマー</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  background: #0e0e12;
+  color: #d0d0d0;
+  min-height: 100vh;
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.header h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #E8B84A;
+  letter-spacing: 2px;
+}
+.current-time {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  color: #666;
+}
+
+/* Add bar */
+.add-bar {
+  padding: 16px 24px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.add-bar input[type="text"] {
+  flex: 1;
+  min-width: 150px;
+  padding: 10px 14px;
+  background: #1a1a22;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  color: #ddd;
+  font-size: 14px;
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  outline: none;
+}
+.add-bar input[type="text"]:focus {
+  border-color: rgba(232,184,74,0.4);
+}
+.add-bar select, .add-bar input[type="number"], .add-bar input[type="time"] {
+  padding: 10px 12px;
+  background: #1a1a22;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  color: #ddd;
+  font-size: 14px;
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  outline: none;
+}
+.add-bar input[type="number"] { width: 70px; }
+.add-bar input[type="time"] { width: 120px; }
+.mode-group {
+  display: flex;
+  gap: 4px;
+}
+.mode-btn {
+  padding: 10px 14px;
+  background: #1a1a22;
+  border: 1px solid rgba(255,255,255,0.08);
+  color: #888;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+}
+.mode-btn:first-child { border-radius: 8px 0 0 8px; }
+.mode-btn:last-child { border-radius: 0 8px 8px 0; }
+.mode-btn.active {
+  background: rgba(232,184,74,0.15);
+  border-color: rgba(232,184,74,0.3);
+  color: #E8B84A;
+}
+.btn-add {
+  padding: 10px 20px;
+  background: linear-gradient(145deg, #333340, #1e1e28);
+  color: #E8B84A;
+  border: 1px solid rgba(232,184,74,0.3);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+}
+.btn-add:hover {
+  border-color: #E8B84A;
+  transform: translateY(-1px);
+}
+.countdown-fields, .stopwatch-fields { display: none; }
+.countdown-fields.show, .stopwatch-fields.show { display: contents; }
+
+/* Timers grid */
+.timers {
+  padding: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+/* Timer card */
+.timer-card {
+  background: #14141a;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 24px;
+  position: relative;
+  transition: border-color 0.3s;
+}
+.timer-card.warning {
+  border-color: rgba(255,107,107,0.3);
+  animation: warningPulse 1s ease-in-out infinite;
+}
+@keyframes warningPulse {
+  0%, 100% { background: #14141a; }
+  50% { background: #1a1418; }
+}
+.timer-card.done {
+  border-color: rgba(232,184,74,0.4);
+  background: rgba(232,184,74,0.05);
+}
+
+.timer-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #999;
+  margin-bottom: 4px;
+}
+.timer-type {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #555;
+  margin-bottom: 12px;
+}
+.timer-display {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 52px;
+  font-weight: 800;
+  color: #f0f0f0;
+  line-height: 1;
+  margin-bottom: 4px;
+  letter-spacing: 2px;
+}
+.timer-display.countdown { color: #E8B84A; }
+.timer-display.warning-text { color: #ff6b6b; }
+.timer-display.done-text { color: #6bcb77; }
+.timer-sub {
+  font-size: 12px;
+  color: #555;
+  margin-bottom: 16px;
+}
+
+.timer-controls {
+  display: flex;
+  gap: 8px;
+}
+.t-btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.03);
+  color: #999;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+}
+.t-btn:hover { background: rgba(255,255,255,0.06); color: #ddd; }
+.t-btn.danger { border-color: rgba(255,107,107,0.2); color: #ff6b6b; }
+.t-btn.danger:hover { background: rgba(255,107,107,0.1); }
+.t-btn.primary { border-color: rgba(232,184,74,0.3); color: #E8B84A; }
+.t-btn.primary:hover { background: rgba(232,184,74,0.1); }
+
+/* Fullscreen */
+.timer-card .fullscreen-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  color: #444;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+.timer-card .fullscreen-btn:hover { color: #E8B84A; }
+
+/* Fullscreen overlay */
+.fs-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: #0e0e12;
+  z-index: 100;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.fs-overlay.show { display: flex; }
+.fs-label {
+  font-size: 28px;
+  color: #888;
+  margin-bottom: 16px;
+}
+.fs-time {
+  font-family: 'Montserrat', sans-serif;
+  font-size: min(20vw, 180px);
+  font-weight: 900;
+  color: #E8B84A;
+  letter-spacing: 4px;
+}
+.fs-time.warning-text { color: #ff6b6b; }
+.fs-time.done-text { color: #6bcb77; }
+.fs-sub {
+  font-size: 18px;
+  color: #555;
+  margin-top: 12px;
+}
+.fs-close-hint {
+  position: absolute;
+  bottom: 24px;
+  font-size: 12px;
+  color: #444;
+}
+
+/* Empty state */
+.empty {
+  text-align: center;
+  padding: 80px 24px;
+  color: #444;
+}
+.empty-icon { font-size: 48px; margin-bottom: 12px; }
+.empty p { font-size: 14px; }
+
+/* Presets */
+.presets {
+  padding: 8px 24px 0;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.preset-btn {
+  padding: 6px 12px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 6px;
+  color: #666;
+  font-size: 11px;
+  cursor: pointer;
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  transition: all 0.15s;
+}
+.preset-btn:hover { color: #E8B84A; border-color: rgba(232,184,74,0.2); }
+
+@media (max-width: 768px) {
+  .add-bar { flex-direction: column; }
+  .add-bar input[type="text"] { min-width: auto; width: 100%; }
+  .timers { grid-template-columns: 1fr; padding: 16px; }
+  .timer-display { font-size: 42px; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <h1>🕐 AHI 現場タイマー</h1>
+  </div>
+  <div class="current-time" id="clock"></div>
+</div>
+
+<div class="presets">
+  <button class="preset-btn" onclick="quickAdd('開場まで', 30)">開場 30分前</button>
+  <button class="preset-btn" onclick="quickAdd('本番まで', 60)">本番 1時間前</button>
+  <button class="preset-btn" onclick="quickAdd('撤収まで', 15)">撤収 15分前</button>
+  <button class="preset-btn" onclick="quickAdd('休憩終了まで', 10)">休憩 10分</button>
+  <button class="preset-btn" onclick="quickAdd('昼休憩終了まで', 60)">昼休憩 1時間</button>
+  <button class="preset-btn" onclick="addStopwatch('経過時間')">⏱ ストップウォッチ</button>
+</div>
+
+<div class="add-bar">
+  <input type="text" id="timerName" placeholder="タイマー名（例：開場まで）">
+  <div class="mode-group">
+    <button class="mode-btn active" id="modeCountdown" onclick="setMode('countdown')">カウントダウン</button>
+    <button class="mode-btn" id="modeStopwatch" onclick="setMode('stopwatch')">ストップウォッチ</button>
+    <button class="mode-btn" id="modeTarget" onclick="setMode('target')">時刻指定</button>
+  </div>
+  <div class="countdown-fields show" id="countdownFields">
+    <input type="number" id="timerMin" placeholder="分" min="1" max="999" value="30">
+  </div>
+  <div class="stopwatch-fields" id="targetFields">
+    <input type="time" id="targetTime" value="">
+  </div>
+  <button class="btn-add" onclick="addTimer()">＋ 追加</button>
+</div>
+
+<div class="timers" id="timers"></div>
+<div class="empty" id="emptyState">
+  <div class="empty-icon">⏱</div>
+  <p>タイマーを追加してください</p>
+  <p style="margin-top:8px;font-size:12px;color:#333;">上のプリセットボタンでワンタップ追加！</p>
+</div>
+
+<!-- Fullscreen overlay -->
+<div class="fs-overlay" id="fsOverlay" onclick="closeFullscreen()">
+  <div class="fs-label" id="fsLabel"></div>
+  <div class="fs-time" id="fsTime"></div>
+  <div class="fs-sub" id="fsSub"></div>
+  <div class="fs-close-hint">クリックで閉じる</div>
+</div>
+
+<script>
+let timers = [];
+let timerIdCounter = 0;
+let currentMode = 'countdown';
+let fullscreenId = null;
+
+function setMode(mode) {
+  currentMode = mode;
+  document.getElementById('modeCountdown').classList.toggle('active', mode === 'countdown');
+  document.getElementById('modeStopwatch').classList.toggle('active', mode === 'stopwatch');
+  document.getElementById('modeTarget').classList.toggle('active', mode === 'target');
+  document.getElementById('countdownFields').classList.toggle('show', mode === 'countdown');
+  document.getElementById('targetFields').classList.toggle('show', mode === 'target');
+}
+
+function addTimer() {
+  const name = document.getElementById('timerName').value || 'タイマー';
+  if (currentMode === 'countdown') {
+    const min = parseInt(document.getElementById('timerMin').value) || 30;
+    addCountdown(name, min);
+  } else if (currentMode === 'stopwatch') {
+    addStopwatch(name);
+  } else if (currentMode === 'target') {
+    const targetTime = document.getElementById('targetTime').value;
+    if (!targetTime) { alert('時刻を入力してください'); return; }
+    addTargetTimer(name, targetTime);
+  }
+  document.getElementById('timerName').value = '';
+}
+
+function addCountdown(name, minutes) {
+  const id = timerIdCounter++;
+  timers.push({
+    id, name, type: 'countdown',
+    totalSec: minutes * 60,
+    remainSec: minutes * 60,
+    running: true,
+    done: false,
+  });
+  renderTimers();
+}
+
+function addStopwatch(name) {
+  const id = timerIdCounter++;
+  timers.push({
+    id, name, type: 'stopwatch',
+    elapsed: 0,
+    running: true,
+    done: false,
+  });
+  renderTimers();
+}
+
+function addTargetTimer(name, timeStr) {
+  const [h, m] = timeStr.split(':').map(Number);
+  const now = new Date();
+  const target = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m, 0);
+  if (target <= now) target.setDate(target.getDate() + 1);
+  const id = timerIdCounter++;
+  timers.push({
+    id, name, type: 'target',
+    targetMs: target.getTime(),
+    running: true,
+    done: false,
+  });
+  renderTimers();
+}
+
+function quickAdd(name, min) {
+  addCountdown(name, min);
+}
+
+function formatTime(totalSec) {
+  const neg = totalSec < 0;
+  const abs = Math.abs(Math.floor(totalSec));
+  const h = Math.floor(abs / 3600);
+  const m = Math.floor((abs % 3600) / 60);
+  const s = abs % 60;
+  const pad = n => String(n).padStart(2, '0');
+  if (h > 0) return (neg ? '-' : '') + h + ':' + pad(m) + ':' + pad(s);
+  return (neg ? '-' : '') + pad(m) + ':' + pad(s);
+}
+
+function getTimerSeconds(t) {
+  if (t.type === 'countdown') return t.remainSec;
+  if (t.type === 'stopwatch') return t.elapsed;
+  if (t.type === 'target') return Math.max(0, (t.targetMs - Date.now()) / 1000);
+  return 0;
+}
+
+function toggleTimer(id) {
+  const t = timers.find(x => x.id === id);
+  if (t) t.running = !t.running;
+  renderTimers();
+}
+
+function resetTimer(id) {
+  const t = timers.find(x => x.id === id);
+  if (!t) return;
+  if (t.type === 'countdown') { t.remainSec = t.totalSec; t.done = false; }
+  if (t.type === 'stopwatch') { t.elapsed = 0; t.done = false; }
+  t.running = false;
+  renderTimers();
+}
+
+function removeTimer(id) {
+  timers = timers.filter(x => x.id !== id);
+  if (fullscreenId === id) closeFullscreen();
+  renderTimers();
+}
+
+function openFullscreen(id) {
+  fullscreenId = id;
+  document.getElementById('fsOverlay').classList.add('show');
+}
+
+function closeFullscreen() {
+  fullscreenId = null;
+  document.getElementById('fsOverlay').classList.remove('show');
+}
+
+function renderTimers() {
+  const container = document.getElementById('timers');
+  const empty = document.getElementById('emptyState');
+  if (timers.length === 0) {
+    container.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  container.innerHTML = timers.map(t => {
+    const sec = getTimerSeconds(t);
+    const isWarning = t.type !== 'stopwatch' && !t.done && sec <= 60 && sec > 0;
+    const isDone = t.type !== 'stopwatch' && sec <= 0 && t.running;
+    const typeLabel = t.type === 'countdown' ? 'COUNTDOWN' : t.type === 'stopwatch' ? 'STOPWATCH' : 'TARGET TIME';
+    const displayClass = t.type === 'stopwatch' ? '' : (isDone ? 'done-text' : (isWarning ? 'warning-text' : 'countdown'));
+    const cardClass = isDone ? 'done' : (isWarning ? 'warning' : '');
+    return `
+      <div class="timer-card ${cardClass}" id="card-${t.id}">
+        <button class="fullscreen-btn" onclick="event.stopPropagation();openFullscreen(${t.id})">⛶</button>
+        <div class="timer-label">${t.name}</div>
+        <div class="timer-type">${typeLabel}</div>
+        <div class="timer-display ${displayClass}" id="display-${t.id}">${formatTime(sec)}</div>
+        <div class="timer-sub" id="sub-${t.id}">${t.running ? (isDone ? '⏰ 時間です！' : '稼働中') : '一時停止中'}</div>
+        <div class="timer-controls">
+          <button class="t-btn primary" onclick="toggleTimer(${t.id})">${t.running ? '⏸ 停止' : '▶ 開始'}</button>
+          <button class="t-btn" onclick="resetTimer(${t.id})">↺ リセット</button>
+          <button class="t-btn danger" onclick="removeTimer(${t.id})">✕ 削除</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// Main tick - every second
+setInterval(function() {
+  // Update clock
+  const now = new Date();
+  document.getElementById('clock').textContent =
+    now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0') + ':' + String(now.getSeconds()).padStart(2,'0');
+
+  // Update timers
+  timers.forEach(t => {
+    if (!t.running) return;
+    if (t.type === 'countdown') {
+      t.remainSec = Math.max(0, t.remainSec - 1);
+      if (t.remainSec <= 0) t.done = true;
+    }
+    if (t.type === 'stopwatch') {
+      t.elapsed += 1;
+    }
+    // target is calculated live from targetMs
+  });
+
+  // Update displays without full re-render
+  timers.forEach(t => {
+    const el = document.getElementById('display-' + t.id);
+    const sub = document.getElementById('sub-' + t.id);
+    const card = document.getElementById('card-' + t.id);
+    if (!el) return;
+
+    const sec = getTimerSeconds(t);
+    el.textContent = formatTime(sec);
+
+    const isWarning = t.type !== 'stopwatch' && !t.done && sec <= 60 && sec > 0;
+    const isDone = t.type !== 'stopwatch' && sec <= 0;
+
+    // Update classes
+    el.className = 'timer-display';
+    if (t.type === 'stopwatch') { /* default */ }
+    else if (isDone) el.classList.add('done-text');
+    else if (isWarning) el.classList.add('warning-text');
+    else el.classList.add('countdown');
+
+    card.className = 'timer-card';
+    if (isDone) card.classList.add('done');
+    else if (isWarning) card.classList.add('warning');
+
+    if (sub) sub.textContent = t.running ? (isDone ? '⏰ 時間です！' : '稼働中') : '一時停止中';
+  });
+
+  // Update fullscreen
+  if (fullscreenId !== null) {
+    const t = timers.find(x => x.id === fullscreenId);
+    if (t) {
+      const sec = getTimerSeconds(t);
+      const fsTime = document.getElementById('fsTime');
+      const fsLabel = document.getElementById('fsLabel');
+      const fsSub = document.getElementById('fsSub');
+      fsLabel.textContent = t.name;
+      fsTime.textContent = formatTime(sec);
+      const isDone = t.type !== 'stopwatch' && sec <= 0;
+      const isWarning = t.type !== 'stopwatch' && sec <= 60 && sec > 0;
+      fsTime.className = 'fs-time';
+      if (isDone) { fsTime.classList.add('done-text'); fsSub.textContent = '⏰ 時間です！'; }
+      else if (isWarning) { fsTime.classList.add('warning-text'); fsSub.textContent = '残りわずか！'; }
+      else fsSub.textContent = t.running ? '稼働中' : '一時停止中';
+    }
+  }
+}, 1000);
+
+// Initial render
+renderTimers();
+
+// Set default target time to 1 hour from now
+const defTarget = new Date(Date.now() + 3600000);
+document.getElementById('targetTime').value =
+  String(defTarget.getHours()).padStart(2,'0') + ':' + String(defTarget.getMinutes()).padStart(2,'0');
+</script>
+</body>
+</html>
