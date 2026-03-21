@@ -59,22 +59,18 @@ h1, h2, h3, h4 { font-family: 'Sora', 'Zen Kaku Gothic New', sans-serif; }
 }
 /* Hero unicorn */
 .hero-unicorn {
-  position: absolute;
-  right: -20px;
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
+  flex-shrink: 0;
   opacity: 0;
-  animation: unicornFadeIn 1.5s 1s forwards;
+  animation: unicornFadeIn 1.5s 0.8s forwards;
 }
 .hero-unicorn svg {
-  width: clamp(220px, 28vw, 360px);
+  width: clamp(200px, 30vw, 380px);
   height: auto;
-  filter: drop-shadow(0 0 40px rgba(232,184,74,0.15));
+  filter: drop-shadow(0 0 50px rgba(232,184,74,0.2)) drop-shadow(0 0 100px rgba(232,184,74,0.08));
 }
 @keyframes unicornFadeIn {
-  from { opacity: 0; transform: translateY(-50%) translateX(20px); }
-  to { opacity: 1; transform: translateY(-50%) translateX(0); }
+  from { opacity: 0; transform: translateX(30px) scale(0.95); }
+  to { opacity: 1; transform: translateX(0) scale(1); }
 }
 
 /* ===== Navigation ===== */
@@ -160,11 +156,19 @@ nav.scrolled {
   0% { transform: scale(1) translate(0,0); }
   100% { transform: scale(1.03) translate(-1%,1%); }
 }
-.hero-inner {
+.hero-content {
   position: relative;
   z-index: 1;
-  max-width: 800px;
-  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(40px, 6vw, 80px);
+  max-width: 1100px;
+  padding: 0 48px;
+}
+.hero-inner {
+  flex: 1;
+  min-width: 0;
 }
 .hero-statement {
   font-size: clamp(2rem, 5vw, 3.6rem);
@@ -537,9 +541,10 @@ footer {
   }
   .nav-links.open a { font-size: 16px; color: #ccc; }
   .hamburger { display: flex; }
-  .hero-inner { padding: 0 24px; }
+  .hero-inner { padding: 0; }
   .hero-brand { display: none; }
-  .hero-unicorn { display: none; }
+  .hero-content { flex-direction: column; padding: 0 24px; gap: 32px; }
+  .hero-unicorn svg { width: 200px; }
   .section { padding: 80px 24px; }
   .philosophy-inner { padding: 80px 24px; grid-template-columns: 1fr; gap: 40px; }
   .what-grid { grid-template-columns: 1fr; }
@@ -589,6 +594,7 @@ footer {
 
 <!-- Hero -->
 <section class="hero">
+  <div class="hero-content">
   <div class="hero-inner">
     <h1 class="hero-statement">本質的な課題だけを、<br><span class="em">解決する。</span></h1>
     <p class="hero-sub">AIを導入しても、業務が変わらない。<br>その原因は技術ではなく、課題の定義にある。<br>AHIは御社の現場に入り込み、本当の問題を見つけ、解決します。</p>
@@ -651,6 +657,7 @@ footer {
       <circle cx="51" cy="83" r="1" fill="#E8B84A" opacity="0.5"/>
     </svg>
   </div>
+  </div><!-- /hero-content -->
 </section>
 
 <!-- Philosophy -->
