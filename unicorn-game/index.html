@@ -30,6 +30,7 @@ canvas {
 #start-screen, #gameover-screen {
   text-align: center;
   pointer-events: auto;
+  z-index: 20;
 }
 #start-screen h1 {
   font-size: 48px;
@@ -336,9 +337,13 @@ document.addEventListener('keydown', (e) => {
     jump();
   }
 });
-canvas.addEventListener('touchstart', (e) => { e.preventDefault(); jump(); });
+document.addEventListener('touchstart', (e) => {
+  if (e.target.classList.contains('play-btn')) return;
+  e.preventDefault();
+  jump();
+}, { passive: false });
 canvas.addEventListener('mousedown', (e) => {
-  if (state === 'playing') jump();
+  jump();
 });
 document.getElementById('startBtn').addEventListener('click', jump);
 document.getElementById('restartBtn').addEventListener('click', jump);
