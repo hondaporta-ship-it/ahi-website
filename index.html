@@ -45,9 +45,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
-/* ===== Typography ===== */
 h1, h2, h3, h4 { font-family: 'Sora', 'Zen Kaku Gothic New', sans-serif; }
+::selection { background: rgba(232,184,74,0.3); color: #fff; }
+
+/* ===== Shared Styles ===== */
 .label {
   font-family: 'Montserrat', sans-serif;
   font-size: 10px;
@@ -58,47 +59,11 @@ h1, h2, h3, h4 { font-family: 'Sora', 'Zen Kaku Gothic New', sans-serif; }
   display: block;
 }
 .gold { color: #E8B84A; }
-
-/* ===== Selection ===== */
-::selection { background: rgba(232,184,74,0.3); color: #fff; }
+.bar { width: 40px; height: 2px; background: #E8B84A; margin-bottom: 40px; }
 
 /* ===== Unicorn SVG ===== */
-.unicorn-white {
-  fill: none;
-  stroke: rgba(255,255,255,0.85);
-  stroke-width: 2.3;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.horn-gold {
-  fill: none;
-  stroke: #E8B84A;
-  stroke-width: 2.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-/* Hero unicorn */
-.hero-unicorn-wrap {
-  display: block;
-  width: 160px;
-  height: 160px;
-  margin: 0 auto 40px auto;
-  background: linear-gradient(145deg, #333340, #1e1e28);
-  border-radius: 36px;
-  padding: 28px;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.3), 0 0 80px rgba(232,184,74,0.04);
-  transition: transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.4s;
-}
-.hero-unicorn-wrap:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 100px rgba(232,184,74,0.08);
-}
-.hero-unicorn-wrap svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
+.unicorn-white { fill: none; stroke: rgba(255,255,255,0.85); stroke-width: 2.3; stroke-linecap: round; stroke-linejoin: round; }
+.horn-gold { fill: none; stroke: #E8B84A; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
 
 /* ===== Navigation ===== */
 nav {
@@ -148,10 +113,8 @@ nav.scrolled {
 .nav-links a::after {
   content: '';
   position: absolute;
-  bottom: -4px;
-  left: 0;
-  width: 0;
-  height: 1px;
+  bottom: -4px; left: 0;
+  width: 0; height: 1px;
   background: #E8B84A;
   transition: width 0.3s;
 }
@@ -170,8 +133,7 @@ nav.scrolled {
   z-index: 1001;
 }
 .hamburger span {
-  width: 22px;
-  height: 2px;
+  width: 22px; height: 2px;
   background: #ccc;
   transition: all 0.3s;
   display: block;
@@ -189,14 +151,20 @@ nav.scrolled {
   position: relative;
   overflow: hidden;
 }
+.hero-bg-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
 .hero::before {
   content: '';
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse at 20% 50%, rgba(232,184,74,0.05) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 20%, rgba(91,155,213,0.03) 0%, transparent 50%);
+    radial-gradient(ellipse at 20% 50%, rgba(232,184,74,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(91,155,213,0.04) 0%, transparent 50%);
   animation: drift 16s ease-in-out infinite alternate;
+  z-index: 1;
 }
 @keyframes drift {
   0% { transform: scale(1) translate(0,0); }
@@ -204,30 +172,84 @@ nav.scrolled {
 }
 .hero-inner {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   max-width: 800px;
   padding: 0 32px;
   text-align: center;
 }
+
+/* Hero unicorn */
+.hero-unicorn-wrap {
+  display: block;
+  width: 160px; height: 160px;
+  margin: 0 auto 40px auto;
+  background: linear-gradient(145deg, #333340, #1e1e28);
+  border-radius: 36px;
+  padding: 28px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3), 0 0 80px rgba(232,184,74,0.04);
+  transition: transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94), box-shadow 0.4s;
+  position: relative;
+}
+.hero-unicorn-wrap:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 100px rgba(232,184,74,0.08);
+}
+.hero-unicorn-wrap svg { width: 100%; height: 100%; display: block; }
+
+/* Glow pulse on unicorn */
+.hero-unicorn-wrap::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 38px;
+  background: linear-gradient(135deg, rgba(232,184,74,0.15), transparent 60%);
+  opacity: 0;
+  animation: glowPulse 4s ease-in-out infinite;
+  z-index: -1;
+}
+@keyframes glowPulse {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+.hero-brand {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(2.4rem, 5vw, 3.4rem);
+  font-weight: 800;
+  letter-spacing: 12px;
+  margin-bottom: 8px;
+}
+.hero-brand .a { color: #E8685A; }
+.hero-brand .h { background: linear-gradient(135deg, #ffd93d, #6bcb77); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.hero-brand .i { color: #5B9BD5; }
+
+.hero-subtitle {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  letter-spacing: 5px;
+  color: rgba(255,255,255,0.35);
+  text-transform: uppercase;
+  margin-bottom: 40px;
+}
+
 .hero-statement {
-  font-size: clamp(2rem, 5vw, 3.6rem);
+  font-size: clamp(1.8rem, 4.5vw, 3.2rem);
   font-weight: 700;
-  line-height: 1.3;
+  line-height: 1.35;
   color: #f5f5f5;
   margin-bottom: 28px;
 }
-.hero-statement .em {
-  color: #E8B84A;
-  position: relative;
-}
+.hero-statement .em { color: #E8B84A; }
+
 .hero-sub {
-  font-size: clamp(0.95rem, 1.8vw, 1.15rem);
+  font-size: clamp(0.9rem, 1.6vw, 1.1rem);
   color: #888;
   max-width: 560px;
   margin: 0 auto 48px auto;
   font-weight: 300;
   line-height: 2;
 }
+
 .hero-cta {
   display: inline-block;
   padding: 16px 48px;
@@ -252,10 +274,7 @@ nav.scrolled {
   transition: transform 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
   z-index: -1;
 }
-.hero-cta:hover {
-  color: #0e0e12;
-  border-color: #E8B84A;
-}
+.hero-cta:hover { color: #0e0e12; border-color: #E8B84A; }
 .hero-cta:hover::before { transform: scaleX(1); }
 
 .hero-tagline {
@@ -266,6 +285,19 @@ nav.scrolled {
   text-transform: uppercase;
   color: rgba(232,184,74,0.4);
 }
+
+/* Hero fade-in */
+.hero-inner > * {
+  opacity: 0;
+  animation: fadeUp 0.8s forwards;
+}
+.hero-inner > *:nth-child(1) { animation-delay: 0.2s; }
+.hero-inner > *:nth-child(2) { animation-delay: 0.4s; }
+.hero-inner > *:nth-child(3) { animation-delay: 0.6s; }
+.hero-inner > *:nth-child(4) { animation-delay: 0.8s; }
+.hero-inner > *:nth-child(5) { animation-delay: 1.0s; }
+.hero-inner > *:nth-child(6) { animation-delay: 1.2s; }
+.hero-inner > *:nth-child(7) { animation-delay: 1.4s; }
 
 /* ===== Section Base ===== */
 .section {
@@ -285,128 +317,319 @@ nav.scrolled {
   font-size: 15px;
   margin-bottom: 20px;
 }
-.bar {
-  width: 40px;
-  height: 2px;
-  background: #E8B84A;
-  margin-bottom: 40px;
-}
 
-/* ===== Philosophy ===== */
-.philosophy-band {
+/* ===== About Section ===== */
+.about-band {
   background: #131318;
   border-top: 1px solid rgba(255,255,255,0.04);
   border-bottom: 1px solid rgba(255,255,255,0.04);
 }
-.philosophy-inner {
+.about-inner {
   max-width: 1100px;
   margin: 0 auto;
   padding: 120px 48px;
+}
+.about-layout {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 48px;
-}
-.phil-card { padding: 8px 0; }
-.phil-num {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 48px;
-  font-weight: 800;
-  color: rgba(232,184,74,0.12);
-  line-height: 1;
-  margin-bottom: 16px;
-  transition: color 0.4s;
-}
-.phil-card:hover .phil-num { color: rgba(232,184,74,0.25); }
-.phil-card h3 {
-  font-size: 17px;
-  color: #E8B84A;
-  margin-bottom: 12px;
-  font-weight: 600;
-}
-.phil-card p {
-  font-size: 14px;
-  color: #888;
-  line-height: 1.9;
-}
-
-/* ===== What We Do ===== */
-.what-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2px;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 64px;
+  align-items: start;
   margin-top: 48px;
-  background: rgba(255,255,255,0.03);
+}
+.about-profile-card {
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(255,255,255,0.06);
   border-radius: 16px;
+  padding: 36px;
+  position: relative;
   overflow: hidden;
 }
-.what-cell {
-  padding: 40px 36px;
-  background: #0e0e12;
-  transition: background 0.3s, transform 0.3s;
+.about-profile-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #E8685A, #ffd93d, #6bcb77, #5B9BD5);
 }
-.what-cell:hover { background: #141419; }
-.what-num {
+.profile-avatar {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #333340, #1e1e28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  border: 2px solid rgba(232,184,74,0.2);
+}
+.profile-avatar svg { width: 44px; height: 44px; }
+.profile-name {
+  font-size: 24px;
+  color: #f0f0f0;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+.profile-name-en {
   font-family: 'Montserrat', sans-serif;
   font-size: 11px;
   letter-spacing: 3px;
-  color: #E8B84A;
+  color: #666;
+  text-transform: uppercase;
   margin-bottom: 12px;
 }
-.what-cell h4 {
-  font-size: 16px;
-  color: #e0e0e0;
-  margin-bottom: 8px;
+.profile-title {
+  font-size: 13px;
+  color: #E8B84A;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+.profile-bio {
+  font-size: 13.5px;
+  color: #999;
+  line-height: 2;
+}
+.profile-bio strong { color: #ddd; font-weight: 600; }
+.profile-highlights {
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
+}
+.profile-highlight {
+  text-align: center;
+  flex: 1;
+  padding: 14px 0;
+  border-top: 1px solid rgba(232,184,74,0.15);
+}
+.profile-highlight .num {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  color: #E8B84A;
+  line-height: 1;
+}
+.profile-highlight .num .unit { font-size: 12px; font-weight: 500; }
+.profile-highlight .desc {
+  font-size: 10px;
+  color: #666;
+  margin-top: 4px;
+}
+
+.about-text h3 {
+  font-size: 18px;
+  color: #f0f0f0;
+  margin-bottom: 16px;
   font-weight: 600;
 }
-.what-cell p {
+.about-text p {
+  font-size: 14.5px;
+  color: #999;
+  line-height: 2;
+  margin-bottom: 16px;
+}
+.about-catchphrase {
+  font-size: 20px;
+  color: #E8B84A !important;
+  font-weight: 700;
+  border-left: 3px solid rgba(232,184,74,0.4);
+  padding-left: 20px;
+  margin: 32px 0 !important;
+  line-height: 1.6 !important;
+}
+.about-values {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 24px;
+}
+.about-value {
+  padding: 16px 20px;
+  border-left: 2px solid rgba(232,184,74,0.3);
+  background: rgba(255,255,255,0.02);
+  border-radius: 0 8px 8px 0;
+  transition: border-color 0.3s, background 0.3s;
+}
+.about-value:hover {
+  border-left-color: #E8B84A;
+  background: rgba(255,255,255,0.03);
+}
+.about-value h4 {
+  font-size: 13px;
+  color: #E8B84A;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+.about-value p {
   font-size: 13px;
   color: #777;
   margin-bottom: 0;
-  line-height: 1.8;
+  line-height: 1.7;
 }
 
-/* ===== Approach: FDE ===== */
-.approach-band {
+/* ===== Services Section ===== */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+}
+.service-card {
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 14px;
+  padding: 36px 28px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s, transform 0.3s;
+}
+.service-card:hover {
+  border-color: rgba(232,184,74,0.2);
+  transform: translateY(-2px);
+}
+.service-phase {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #E8B84A;
+  margin-bottom: 6px;
+}
+.service-num {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 48px;
+  font-weight: 800;
+  color: rgba(232,184,74,0.08);
+  line-height: 1;
+  margin-bottom: 12px;
+  transition: color 0.3s;
+}
+.service-card:hover .service-num { color: rgba(232,184,74,0.15); }
+.service-card h3 {
+  font-size: 18px;
+  color: #f0f0f0;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.service-duration {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: #666;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.service-card > p {
+  font-size: 13px;
+  color: #888;
+  line-height: 1.9;
+  margin-bottom: 16px;
+}
+.service-details {
+  list-style: none;
+  padding: 0;
+}
+.service-details li {
+  font-size: 12px;
+  color: #777;
+  padding: 4px 0 4px 16px;
+  position: relative;
+  line-height: 1.6;
+}
+.service-details li::before {
+  content: '›';
+  position: absolute;
+  left: 0;
+  color: #E8B84A;
+  font-weight: 700;
+}
+.service-price-tag {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  text-align: center;
+}
+.service-price {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #f0f0f0;
+}
+.service-price .unit {
+  font-size: 12px;
+  color: #888;
+  font-weight: 400;
+}
+.service-price-note {
+  font-size: 11px;
+  color: #666;
+  margin-top: 4px;
+}
+
+/* ===== Strengths Section ===== */
+.strengths-band {
   background: #131318;
   border-top: 1px solid rgba(255,255,255,0.04);
   border-bottom: 1px solid rgba(255,255,255,0.04);
 }
-.approach-inner {
+.strengths-inner {
   max-width: 1100px;
   margin: 0 auto;
   padding: 120px 48px;
 }
-.approach-compare {
+
+/* Keyword marquee */
+.strengths-keywords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 48px;
+}
+.keyword-chip {
+  padding: 8px 20px;
+  border-radius: 100px;
+  border: 1px solid rgba(232,184,74,0.15);
+  background: rgba(232,184,74,0.03);
+  font-size: 12px;
+  color: #ccc;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+.keyword-chip:hover {
+  border-color: rgba(232,184,74,0.4);
+  background: rgba(232,184,74,0.08);
+  color: #E8B84A;
+}
+
+/* FDE compare */
+.fde-compare {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 32px;
+  gap: 24px;
   margin-top: 48px;
 }
-.approach-col {
-  padding: 36px 32px;
-  border-radius: 12px;
+.fde-col {
+  padding: 32px 28px;
+  border-radius: 14px;
   transition: transform 0.3s;
 }
-.approach-col:hover { transform: translateY(-2px); }
-.approach-col.others {
+.fde-col:hover { transform: translateY(-2px); }
+.fde-col.others {
   border: 1px solid rgba(255,255,255,0.06);
-  background: rgba(255,255,255,0.01);
+  background: rgba(255,255,255,0.015);
 }
-.approach-col.ahi {
+.fde-col.ahi-col {
   border: 1px solid rgba(232,184,74,0.2);
   background: rgba(232,184,74,0.03);
   box-shadow: 0 4px 30px rgba(232,184,74,0.04);
 }
-.approach-col h3 {
+.fde-col h3 {
   font-size: 13px;
   font-family: 'Montserrat', sans-serif;
   letter-spacing: 3px;
   text-transform: uppercase;
   margin-bottom: 24px;
 }
-.approach-col.others h3 { color: #666; }
-.approach-col.ahi h3 { color: #E8B84A; }
-.approach-item {
+.fde-col.others h3 { color: #666; }
+.fde-col.ahi-col h3 { color: #E8B84A; }
+.fde-item {
   padding: 12px 0;
   border-bottom: 1px solid rgba(255,255,255,0.04);
   display: flex;
@@ -414,19 +637,45 @@ nav.scrolled {
   align-items: baseline;
   gap: 16px;
 }
-.approach-item:last-child { border-bottom: none; }
-.approach-item .key {
-  font-size: 13px;
-  color: #666;
+.fde-item:last-child { border-bottom: none; }
+.fde-item .key { font-size: 13px; color: #666; flex-shrink: 0; }
+.fde-col.ahi-col .fde-item .key { color: #999; }
+.fde-item .val { font-size: 13px; color: #555; text-align: right; }
+.fde-col.ahi-col .fde-item .val { color: #ccc; }
+
+/* Palantir model explanation */
+.palantir-box {
+  margin-top: 48px;
+  padding: 32px;
+  border-radius: 14px;
+  background: rgba(232,184,74,0.04);
+  border: 1px solid rgba(232,184,74,0.12);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 24px;
+  align-items: start;
+}
+.palantir-icon {
+  width: 56px; height: 56px;
+  border-radius: 14px;
+  background: rgba(232,184,74,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
   flex-shrink: 0;
 }
-.approach-col.ahi .approach-item .key { color: #999; }
-.approach-item .val {
-  font-size: 13px;
-  color: #555;
-  text-align: right;
+.palantir-box h4 {
+  font-size: 16px;
+  color: #E8B84A;
+  margin-bottom: 8px;
+  font-weight: 600;
 }
-.approach-col.ahi .approach-item .val { color: #ccc; }
+.palantir-box p {
+  font-size: 13.5px;
+  color: #999;
+  line-height: 1.9;
+}
 
 /* ===== Numbers Band ===== */
 .numbers-band {
@@ -447,11 +696,7 @@ nav.scrolled {
   color: #E8B84A;
   line-height: 1;
 }
-.num-item .unit {
-  font-size: 14px;
-  color: #E8B84A;
-  font-weight: 400;
-}
+.num-item .unit { font-size: 14px; color: #E8B84A; font-weight: 400; }
 .num-item .desc {
   font-size: 12px;
   color: #666;
@@ -479,10 +724,7 @@ nav.scrolled {
   margin: 40px 0;
   font-style: normal;
 }
-.story-inner blockquote strong {
-  color: #E8B84A;
-  font-weight: 600;
-}
+.story-inner blockquote strong { color: #E8B84A; font-weight: 600; }
 .story-timeline {
   display: flex;
   gap: 0;
@@ -492,9 +734,7 @@ nav.scrolled {
 .story-timeline::before {
   content: '';
   position: absolute;
-  top: 28px;
-  left: 0;
-  right: 0;
+  top: 28px; left: 0; right: 0;
   height: 1px;
   background: linear-gradient(90deg, rgba(232,184,74,0.3), rgba(232,184,74,0.1));
 }
@@ -505,13 +745,11 @@ nav.scrolled {
   padding-top: 48px;
 }
 .timeline-dot {
-  width: 10px;
-  height: 10px;
+  width: 10px; height: 10px;
   border-radius: 50%;
   background: #E8B84A;
   position: absolute;
-  top: 24px;
-  left: 50%;
+  top: 24px; left: 50%;
   transform: translateX(-50%);
   box-shadow: 0 0 12px rgba(232,184,74,0.3);
 }
@@ -528,48 +766,7 @@ nav.scrolled {
   line-height: 1.6;
 }
 
-/* ===== About / Trust ===== */
-.trust-content {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 64px;
-  align-items: start;
-  margin-top: 48px;
-}
-.trust-text p {
-  font-size: 14px;
-  color: #888;
-  line-height: 2;
-}
-.trust-facts {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-.trust-fact {
-  padding: 20px 24px;
-  border-left: 2px solid rgba(232,184,74,0.3);
-  background: rgba(255,255,255,0.02);
-  border-radius: 0 8px 8px 0;
-  transition: border-color 0.3s, background 0.3s;
-}
-.trust-fact:hover {
-  border-left-color: #E8B84A;
-  background: rgba(255,255,255,0.03);
-}
-.trust-fact h4 {
-  font-size: 13px;
-  color: #E8B84A;
-  margin-bottom: 4px;
-  font-weight: 600;
-}
-.trust-fact p {
-  font-size: 13px;
-  color: #777;
-  margin-bottom: 0;
-}
-
-/* ===== Contact ===== */
+/* ===== Contact Section ===== */
 .contact-band {
   background: #131318;
   border-top: 1px solid rgba(255,255,255,0.04);
@@ -597,9 +794,7 @@ nav.scrolled {
   margin: 0 auto 40px;
   text-align: left;
 }
-.form-group {
-  margin-bottom: 20px;
-}
+.form-group { margin-bottom: 20px; }
 .form-group label {
   display: block;
   font-family: 'Montserrat', sans-serif;
@@ -610,6 +805,7 @@ nav.scrolled {
   margin-bottom: 8px;
 }
 .form-group input,
+.form-group select,
 .form-group textarea {
   width: 100%;
   padding: 14px 16px;
@@ -623,6 +819,7 @@ nav.scrolled {
   outline: none;
 }
 .form-group input:focus,
+.form-group select:focus,
 .form-group textarea:focus {
   border-color: rgba(232,184,74,0.4);
   background: rgba(255,255,255,0.06);
@@ -632,9 +829,7 @@ nav.scrolled {
   min-height: 120px;
 }
 .form-group input::placeholder,
-.form-group textarea::placeholder {
-  color: #555;
-}
+.form-group textarea::placeholder { color: #555; }
 .form-submit {
   display: inline-block;
   padding: 14px 40px;
@@ -663,7 +858,6 @@ nav.scrolled {
   font-family: 'Montserrat', sans-serif;
   letter-spacing: 2px;
 }
-
 .contact-grid {
   display: flex;
   justify-content: center;
@@ -679,10 +873,7 @@ nav.scrolled {
   color: #555;
   margin-bottom: 6px;
 }
-.contact-item .ci-value {
-  font-size: 15px;
-  color: #ccc;
-}
+.contact-item .ci-value { font-size: 15px; color: #ccc; }
 .contact-item a {
   color: #E8B84A;
   text-decoration: none;
@@ -733,13 +924,11 @@ footer {
   text-transform: uppercase;
 }
 
-/* ===== Scroll to top ===== */
+/* ===== Scroll to Top ===== */
 .scroll-top {
   position: fixed;
-  bottom: 32px;
-  right: 32px;
-  width: 44px;
-  height: 44px;
+  bottom: 32px; right: 32px;
+  width: 44px; height: 44px;
   background: rgba(232,184,74,0.1);
   border: 1px solid rgba(232,184,74,0.2);
   border-radius: 50%;
@@ -752,17 +941,13 @@ footer {
   transition: all 0.3s;
   z-index: 99;
 }
-.scroll-top.visible {
-  opacity: 1;
-  pointer-events: auto;
-}
+.scroll-top.visible { opacity: 1; pointer-events: auto; }
 .scroll-top:hover {
   background: rgba(232,184,74,0.2);
   transform: translateY(-2px);
 }
 .scroll-top svg {
-  width: 16px;
-  height: 16px;
+  width: 16px; height: 16px;
   stroke: #E8B84A;
   fill: none;
   stroke-width: 2;
@@ -782,15 +967,6 @@ footer {
   opacity: 1;
   transform: translateY(0);
 }
-.hero-inner > * {
-  opacity: 0;
-  animation: fadeUp 0.8s forwards;
-}
-.hero-inner > *:nth-child(1) { animation-delay: 0.2s; }
-.hero-inner > *:nth-child(2) { animation-delay: 0.5s; }
-.hero-inner > *:nth-child(3) { animation-delay: 0.8s; }
-.hero-inner > *:nth-child(4) { animation-delay: 1.0s; }
-.hero-inner > *:nth-child(5) { animation-delay: 1.3s; }
 
 /* ===== Mobile ===== */
 @media (max-width: 768px) {
@@ -810,36 +986,50 @@ footer {
   }
   .nav-links.open a { font-size: 16px; color: #ccc; }
   .hamburger { display: flex; }
+
   .hero-inner { padding: 0 24px; }
   .hero-unicorn-wrap { width: 120px; height: 120px; border-radius: 28px; padding: 20px; }
+  .hero-brand { letter-spacing: 8px; }
+
   .section { padding: 80px 24px; }
-  .philosophy-inner { padding: 80px 24px; grid-template-columns: 1fr; gap: 40px; }
-  .what-grid { grid-template-columns: 1fr; }
-  .approach-inner { padding: 80px 24px; }
-  .approach-compare { grid-template-columns: 1fr; }
+  .about-inner { padding: 80px 24px; }
+  .about-layout { grid-template-columns: 1fr; gap: 40px; }
+  .profile-highlights { gap: 8px; }
+
+  .services-grid { grid-template-columns: 1fr; gap: 16px; }
+
+  .strengths-inner { padding: 80px 24px; }
+  .fde-compare { grid-template-columns: 1fr; }
+  .palantir-box { grid-template-columns: 1fr; text-align: center; }
+  .palantir-icon { margin: 0 auto; }
+
   .numbers-row { gap: 40px; flex-wrap: wrap; }
   .numbers-band { padding: 60px 24px; }
+
   .story-inner { padding: 80px 24px; }
   .story-timeline { flex-direction: column; gap: 24px; }
   .story-timeline::before { display: none; }
   .timeline-item { padding-top: 0; padding-left: 28px; text-align: left; }
   .timeline-dot { top: 4px; left: 0; }
-  .trust-content { grid-template-columns: 1fr; gap: 40px; }
+
   .contact-inner { padding: 80px 24px; }
   .contact-grid { gap: 32px; }
+
   .footer-inner { flex-direction: column; text-align: center; gap: 16px; }
   .scroll-top { bottom: 20px; right: 20px; width: 40px; height: 40px; }
 }
 
 @media (max-width: 480px) {
-  .hero-statement { font-size: 1.8rem; }
+  .hero-statement { font-size: 1.6rem; }
   .numbers-row { flex-direction: column; gap: 32px; }
+  .strengths-keywords { gap: 8px; }
+  .keyword-chip { font-size: 11px; padding: 6px 14px; }
 }
 </style>
 </head>
 <body>
 
-<!-- Navigation -->
+<!-- ===== Navigation ===== -->
 <nav id="navbar" role="navigation" aria-label="メインナビゲーション">
   <a href="#" class="nav-logo" aria-label="AHI ホーム">
     <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -852,11 +1042,10 @@ footer {
     <span class="nav-logo-text"><span class="a">A</span><span class="h">H</span><span class="i">I</span></span>
   </a>
   <ul class="nav-links" id="navLinks">
-    <li><a href="#philosophy" onclick="closeMenu()">Philosophy</a></li>
-    <li><a href="#services" onclick="closeMenu()">Services</a></li>
-    <li><a href="#approach" onclick="closeMenu()">Approach</a></li>
-    <li><a href="#story" onclick="closeMenu()">Story</a></li>
     <li><a href="#about" onclick="closeMenu()">About</a></li>
+    <li><a href="#services" onclick="closeMenu()">Services</a></li>
+    <li><a href="#strengths" onclick="closeMenu()">Strengths</a></li>
+    <li><a href="#story" onclick="closeMenu()">Story</a></li>
     <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
   </ul>
   <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="メニューを開く" aria-expanded="false">
@@ -864,8 +1053,9 @@ footer {
   </button>
 </nav>
 
-<!-- Hero -->
+<!-- ===== Hero Section ===== -->
 <section class="hero" role="banner">
+  <canvas class="hero-bg-canvas" id="heroCanvas"></canvas>
   <div class="hero-inner">
     <div class="hero-unicorn-wrap">
       <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -876,6 +1066,10 @@ footer {
         <circle cx="23" cy="14" r="1" fill="#e8b84a" opacity="0.5"/>
       </svg>
     </div>
+
+    <div class="hero-brand"><span class="a">A</span><span class="h">H</span><span class="i">I</span></div>
+    <div class="hero-subtitle">Artificial Human Intelligence</div>
+
     <h1 class="hero-statement">本質的な課題だけを、<br><span class="em">解決する。</span></h1>
     <p class="hero-sub">AIを導入しても、業務が変わらない。<br>その原因は技術ではなく、課題の定義にある。<br>AHIは御社の現場に入り込み、本当の問題を見つけ、解決します。</p>
     <a href="#contact" class="hero-cta">Contact Us</a>
@@ -883,90 +1077,195 @@ footer {
   </div>
 </section>
 
-<!-- Philosophy -->
-<div class="philosophy-band" id="philosophy">
-  <div class="philosophy-inner">
-    <article class="phil-card reveal">
-      <div class="phil-num" aria-hidden="true">01</div>
-      <h3>対等であること</h3>
-      <p>御用聞きにはならない。顧客と対等な「横並び」の関係で、必要なことには「ノー」と言える。本質を見極めるために、対等でなければならない。</p>
-    </article>
-    <article class="phil-card reveal">
-      <div class="phil-num" aria-hidden="true">02</div>
-      <h3>現場に入ること</h3>
-      <p>レポートを納品して終わりではない。御社のチームの一員として、課題の定義から実装・運用まで、現場で共に手を動かす。</p>
-    </article>
-    <article class="phil-card reveal">
-      <div class="phil-num" aria-hidden="true">03</div>
-      <h3>本質だけを解くこと</h3>
-      <p>Excelの使い方は教えない。倉庫の整理もしない。御社の事業成長を阻む根本問題だけにフォーカスし、確実に解決する。</p>
-    </article>
+<!-- ===== About Section ===== -->
+<div class="about-band" id="about">
+  <div class="about-inner">
+    <div class="reveal">
+      <span class="label">About</span>
+      <h2>AHIについて</h2>
+      <div class="bar"></div>
+    </div>
+    <div class="about-layout">
+      <div class="about-profile-card reveal">
+        <div class="profile-avatar">
+          <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path class="unicorn-white" d="M22 44 Q15 38 16 30 Q17 22 24 18 L28 18 Q36 16 40 20 Q44 24 42 32 Q40 40 32 44 Q28 46 22 44Z"/>
+            <path class="horn-gold" d="M24 18 L28 8 L30 20"/>
+            <circle cx="34" cy="28" r="2.2" fill="white" opacity="0.9"/>
+          </svg>
+        </div>
+        <div class="profile-name">本田 英樹</div>
+        <div class="profile-name-en">Honda Hideki</div>
+        <div class="profile-title">AHI 代表 / FDE（Forward Deployed Engineer）</div>
+        <div class="profile-bio">
+          <p>長崎県南島原市出身。<strong>創業108年・本田屋かすてら本舗</strong>の四代目の家に生まれる。</p>
+          <p style="margin-top:10px;">イベントディレクターとして<strong>30年間、1,000件以上の現場</strong>を指揮。段取り力、人を動かす力、現場の空気を読む力を培う。</p>
+          <p style="margin-top:10px;">56歳でAIに出会い、<strong>仕事も生活もすべてAIで変革する</strong>「AIオールイン」の実践者に。現場力とAIの革新を掛け合わせたFDEモデルで、日本の中堅企業の本質的な課題解決に挑む。</p>
+        </div>
+        <div class="profile-highlights">
+          <div class="profile-highlight">
+            <div class="num">30<span class="unit">年</span></div>
+            <div class="desc">現場経験</div>
+          </div>
+          <div class="profile-highlight">
+            <div class="num">1,000<span class="unit">+</span></div>
+            <div class="desc">イベント実績</div>
+          </div>
+          <div class="profile-highlight">
+            <div class="num">108<span class="unit">年</span></div>
+            <div class="desc">家業のDNA</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-text reveal">
+        <h3>「伝統を守り続けるための革新」</h3>
+        <p>AHI（Artificial Human Intelligence）は、日本の中堅成長企業に特化した<strong style="color:#ddd;">AI業務変革パートナー</strong>です。</p>
+        <p>米国パランティア社が確立したFDE（Forward Deployed Engineer）モデルを日本市場向けに最適化。コンサルティングで終わらず、クライアントの現場に深く入り込み、AIを活用した業務改革を<strong style="color:#ddd;">課題定義から設計・実装・定着まで一気通貫</strong>で担います。</p>
+
+        <p class="about-catchphrase">「伝統と現場力と革新」</p>
+
+        <div class="about-values">
+          <div class="about-value">
+            <h4>対等であること</h4>
+            <p>御用聞きにはならない。顧客と対等な「横並び」の関係で、必要なことには「ノー」と言える。</p>
+          </div>
+          <div class="about-value">
+            <h4>現場に入ること</h4>
+            <p>レポートを納品して終わりではない。御社のチームの一員として、現場で共に手を動かす。</p>
+          </div>
+          <div class="about-value">
+            <h4>本質だけを解くこと</h4>
+            <p>御社の事業成長を阻む根本問題だけにフォーカスし、確実に解決する。</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- What We Do -->
+<!-- ===== Services Section ===== -->
 <section class="section" id="services">
   <div class="reveal">
     <span class="label">Services</span>
-    <h2>ツール導入で終わらない、<br>業務変革の実装</h2>
+    <h2>サービス概要 — <span class="gold">3つのフェーズ</span></h2>
     <div class="bar"></div>
     <p>AIを入れただけでは何も変わらない。業務の流れを変え、人の動きを変え、成果が出るところまで伴走する。それがAHIの仕事です。</p>
   </div>
-  <div class="what-grid reveal">
-    <div class="what-cell">
-      <div class="what-num">STEP 01</div>
-      <h4>初期診断</h4>
-      <p>2週間の業務診断で「本当のボトルネック」を特定。現場ヒアリングとデータ分析を組み合わせ、表面的な症状ではなく根本原因を見つける。</p>
+
+  <div class="services-grid reveal">
+    <div class="service-card">
+      <div class="service-phase">Phase 1</div>
+      <div class="service-num">01</div>
+      <h3>初期診断</h3>
+      <div class="service-duration">2 Weeks</div>
+      <p>2週間の業務診断で「本当のボトルネック」を特定。現場ヒアリングとデータ分析を組み合わせ、表面的な症状ではなく根本原因を突き止めます。</p>
+      <ul class="service-details">
+        <li>業務フロー可視化（As-Is）</li>
+        <li>データ分析・ボトルネック特定</li>
+        <li>AI適用ポイントの設計</li>
+        <li>診断レポート＋ROI試算</li>
+        <li>PoC提案書の納品</li>
+      </ul>
+      <div class="service-price-tag">
+        <div class="service-price">50〜100<span class="unit">万円</span></div>
+        <div class="service-price-note">2週間の業務診断・課題特定</div>
+      </div>
     </div>
-    <div class="what-cell">
-      <div class="what-num">STEP 02</div>
-      <h4>戦略設計</h4>
-      <p>「どこにAIを入れると最大効果か」を設計。ツール選定ではなく、業務プロセス全体を見渡した戦略を立てる。</p>
+
+    <div class="service-card">
+      <div class="service-phase">Phase 2</div>
+      <div class="service-num">02</div>
+      <h3>FDE常駐型AI導入支援</h3>
+      <div class="service-duration">Monthly Retainer</div>
+      <p>初期診断で特定した課題に対して、実際に現場で手を動かして解決。チームの一員として、課題定義から実装・定着まで一気通貫で担います。</p>
+      <ul class="service-details">
+        <li>月2〜3日の現場訪問 + リモート支援</li>
+        <li>AI戦略の設計・実装・PoC</li>
+        <li>社員教育・マニュアル整備</li>
+        <li>運用フロー構築・定着支援</li>
+        <li>月次レビューで効果測定</li>
+      </ul>
+      <div class="service-price-tag">
+        <div class="service-price">100〜200<span class="unit">万円/月</span></div>
+        <div class="service-price-note">現場訪問 + リモート支援</div>
+      </div>
     </div>
-    <div class="what-cell">
-      <div class="what-num">STEP 03</div>
-      <h4>実装・検証</h4>
-      <p>小さく始めて効果を検証するMVP型アプローチ。成功パターンを確認してから拡大するため、リスクを最小限に抑える。</p>
-    </div>
-    <div class="what-cell">
-      <div class="what-num">STEP 04</div>
-      <h4>定着・自走</h4>
-      <p>社員教育、マニュアル整備、運用フロー構築。AHIがいなくなっても御社だけで回せる状態をつくり、引き渡す。</p>
+
+    <div class="service-card">
+      <div class="service-phase">Phase 3</div>
+      <div class="service-num">03</div>
+      <h3>成果報酬型</h3>
+      <div class="service-duration">Performance-Based</div>
+      <p>削減額や増収額に基づくインセンティブ報酬。AHIの成果がクライアントの成果に直結する、リスク共有型の料金モデルです。</p>
+      <ul class="service-details">
+        <li>KPIを双方で合意して設定</li>
+        <li>Before/After を定量計測</li>
+        <li>月次レビューで効果測定</li>
+        <li>改善効果に応じた報酬</li>
+        <li>上限額設定可能で安心</li>
+      </ul>
+      <div class="service-price-tag">
+        <div class="service-price">10〜20<span class="unit">%</span></div>
+        <div class="service-price-note">削減額・増収額に応じた追加報酬</div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- Approach: FDE -->
-<div class="approach-band" id="approach">
-  <div class="approach-inner">
+<!-- ===== Strengths Section ===== -->
+<div class="strengths-band" id="strengths">
+  <div class="strengths-inner">
     <div class="reveal">
-      <span class="label">Approach</span>
-      <h2>FDE — 現場に深く入り込む</h2>
+      <span class="label">Strengths</span>
+      <h2>現場力 × AI — <span class="gold">他にはない強み</span></h2>
       <div class="bar"></div>
-      <p>海外テック企業が実践するFDE（Forward Deployed Engineer）モデルを、日本の中堅企業向けに最適化しました。<br>「開発者 × コンサルタント × プロジェクトリーダー」を一人で担い、課題そのものを再定義しながら仕組みを構築します。</p>
+      <p style="color:#999;font-size:15px;margin-bottom:8px;">海外テック企業が実践するFDE（Forward Deployed Engineer）モデルを、日本の中堅企業向けに最適化。<br>「開発者 × コンサルタント × プロジェクトリーダー」を一人で担い、課題そのものを再定義しながら仕組みを構築します。</p>
     </div>
-    <div class="approach-compare reveal">
-      <div class="approach-col others">
+
+    <div class="strengths-keywords reveal">
+      <span class="keyword-chip">🔍 課題の再定義</span>
+      <span class="keyword-chip">🤝 チームの一員</span>
+      <span class="keyword-chip">⚡ MVP型検証</span>
+      <span class="keyword-chip">📊 データ駆動</span>
+      <span class="keyword-chip">🎯 本質課題のみ</span>
+      <span class="keyword-chip">🔄 継続改善</span>
+      <span class="keyword-chip">🏭 30年の現場力</span>
+      <span class="keyword-chip">🤖 AI実践者</span>
+    </div>
+
+    <div class="fde-compare reveal">
+      <div class="fde-col others">
         <h3>従来のアプローチ</h3>
-        <div class="approach-item"><span class="key">立ち位置</span><span class="val">ベンダー側として外から納品</span></div>
-        <div class="approach-item"><span class="key">開発</span><span class="val">ウォーターフォール・仕様固定</span></div>
-        <div class="approach-item"><span class="key">成果物</span><span class="val">レポート or システム納品</span></div>
-        <div class="approach-item"><span class="key">関係性</span><span class="val">契約単位で終了</span></div>
-        <div class="approach-item"><span class="key">価格帯</span><span class="val">月額500万円〜 or 数千万/案件</span></div>
+        <div class="fde-item"><span class="key">目的</span><span class="val">要件に基づきシステム納品</span></div>
+        <div class="fde-item"><span class="key">立ち位置</span><span class="val">ベンダー側として外から納品</span></div>
+        <div class="fde-item"><span class="key">開発</span><span class="val">ウォーターフォール・仕様固定</span></div>
+        <div class="fde-item"><span class="key">成果物</span><span class="val">レポート or システム納品</span></div>
+        <div class="fde-item"><span class="key">関係性</span><span class="val">契約単位で終了</span></div>
+        <div class="fde-item"><span class="key">価格帯</span><span class="val">月額500万円〜</span></div>
       </div>
-      <div class="approach-col ahi">
+      <div class="fde-col ahi-col">
         <h3>AHI — FDEモデル</h3>
-        <div class="approach-item"><span class="key">立ち位置</span><span class="val">チームの一員として中に入る</span></div>
-        <div class="approach-item"><span class="key">開発</span><span class="val">MVP型・小さく検証しながら構築</span></div>
-        <div class="approach-item"><span class="key">成果物</span><span class="val">業務そのものの変革</span></div>
-        <div class="approach-item"><span class="key">関係性</span><span class="val">長期パートナーとして継続改善</span></div>
-        <div class="approach-item"><span class="key">価格帯</span><span class="val">月額50〜300万円</span></div>
+        <div class="fde-item"><span class="key">目的</span><span class="val">顧客課題を直接解決し業務変革</span></div>
+        <div class="fde-item"><span class="key">立ち位置</span><span class="val">チームの一員として中に入る</span></div>
+        <div class="fde-item"><span class="key">開発</span><span class="val">MVP型・小さく検証しながら構築</span></div>
+        <div class="fde-item"><span class="key">成果物</span><span class="val">業務そのものの変革</span></div>
+        <div class="fde-item"><span class="key">関係性</span><span class="val">長期パートナーとして継続改善</span></div>
+        <div class="fde-item"><span class="key">価格帯</span><span class="val">月額50〜300万円</span></div>
+      </div>
+    </div>
+
+    <div class="palantir-box reveal">
+      <div class="palantir-icon">🦄</div>
+      <div>
+        <h4>パランティア型 — 企業に深く入り込むFDEカンパニー</h4>
+        <p>パランティア（Palantir Technologies）が確立した「顧客の現場に深く入り込んで課題を解決する」モデルを、日本の中堅企業向けに最適化しました。大手コンサルは高額すぎ、個人コンサルでは信用力不足——この<strong style="color:#ddd;">「現場密着 × 適正価格」の需要ギャップ</strong>がAHIの狙う市場です。30年の現場経験 × AI実践力で、テクノロジーだけでは解けない本質的な課題を解決します。</p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Numbers -->
+<!-- ===== Numbers ===== -->
 <div class="numbers-band" role="region" aria-label="実績数値">
   <div class="numbers-row reveal" id="numbersRow">
     <div class="num-item">
@@ -981,10 +1280,14 @@ footer {
       <div class="big"><span class="count-up" data-target="108">0</span><span class="unit">年</span></div>
       <div class="desc">家業が培った信頼のDNA</div>
     </div>
+    <div class="num-item">
+      <div class="big"><span class="count-up" data-target="399">0</span><span class="unit">社</span></div>
+      <div class="desc">アプローチ可能なターゲット企業</div>
+    </div>
   </div>
 </div>
 
-<!-- Story -->
+<!-- ===== Story Section ===== -->
 <div class="story-band" id="story">
   <div class="story-inner">
     <div class="reveal">
@@ -1023,52 +1326,17 @@ footer {
   </div>
 </div>
 
-<!-- About / Trust -->
-<section class="section section-narrow" id="about">
-  <div class="reveal">
-    <span class="label">About</span>
-    <h2>信頼の根拠</h2>
-    <div class="bar"></div>
-  </div>
-  <div class="trust-content reveal">
-    <div class="trust-text">
-      <p>AHIの強みは、テクノロジーだけではありません。</p>
-      <p>代表の本田英樹は、30年にわたりイベントディレクターとして数千の現場を指揮してきました。段取り力、人を動かす力、現場の空気を読む力。これらはAIでは代替できない「人間の知恵」です。</p>
-      <p>そして今、その現場力にAIの革新を掛け合わせることで、従来のコンサルティングでは到達できなかった深さと速さで、企業の本質的な課題を解決します。</p>
-      <p style="color:#E8B84A;font-size:13px;margin-top:24px;font-family:'Montserrat',sans-serif;letter-spacing:2px;">Where Human Wisdom Meets AI Power</p>
-    </div>
-    <div class="trust-facts">
-      <div class="trust-fact">
-        <h4>現場力</h4>
-        <p>30年のディレクション経験。机上の空論ではなく、現場で何が起きるかを肌で知っている。</p>
-      </div>
-      <div class="trust-fact">
-        <h4>伝統のDNA</h4>
-        <p>創業108年・本田屋かすてら本舗の家訓「伝統を守り続けるための革新」がAHIの原点。</p>
-      </div>
-      <div class="trust-fact">
-        <h4>AI実践者</h4>
-        <p>理論ではなく、自らAIオールインで生活する実践者。毎日AIを使い倒しているから語れる。</p>
-      </div>
-      <div class="trust-fact">
-        <h4>九州ネットワーク</h4>
-        <p>福岡・九州を拠点に、成長意欲のある中堅企業と直接つながるネットワーク。</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Contact -->
+<!-- ===== Contact Section ===== -->
 <div class="contact-band" id="contact">
   <div class="contact-inner">
     <div class="reveal">
       <span class="label">Contact</span>
       <h2>まずは、対話から。</h2>
-      <p>御社の「本当の課題」を一緒に見つけましょう。<br>初期診断から始めることで、投資対効果を確認した上で次のステップに進めます。</p>
+      <p style="color:#777;font-size:15px;margin-bottom:40px;">御社の「本当の課題」を一緒に見つけましょう。<br>初期診断から始めることで、投資対効果を確認した上で次のステップに進めます。</p>
 
       <form class="contact-form" action="https://formspree.io/f/xpwzqjlp" method="POST" id="contactForm">
         <div class="form-group">
-          <label for="name">お名前</label>
+          <label for="name">お名前 <span style="color:#E8685A;">*</span></label>
           <input type="text" id="name" name="name" placeholder="山田 太郎" required>
         </div>
         <div class="form-group">
@@ -1076,8 +1344,18 @@ footer {
           <input type="text" id="company" name="company" placeholder="株式会社○○">
         </div>
         <div class="form-group">
-          <label for="email">メールアドレス</label>
+          <label for="email">メールアドレス <span style="color:#E8685A;">*</span></label>
           <input type="email" id="email" name="email" placeholder="taro@example.com" required>
+        </div>
+        <div class="form-group">
+          <label for="inquiry-type">ご相談内容</label>
+          <select id="inquiry-type" name="inquiry-type">
+            <option value="" disabled selected>お選びください</option>
+            <option value="diagnosis">初期診断について</option>
+            <option value="retainer">FDEリテーナーについて</option>
+            <option value="general">AI/DX全般のご相談</option>
+            <option value="other">その他</option>
+          </select>
         </div>
         <div class="form-group">
           <label for="message">お問い合わせ内容</label>
@@ -1091,7 +1369,7 @@ footer {
       <div class="contact-grid">
         <div class="contact-item">
           <div class="ci-label">Email</div>
-          <div class="ci-value"><a href="mailto:info@ahi-consulting.jp">info@ahi-consulting.jp</a></div>
+          <div class="ci-value"><a href="mailto:hondaporta@gmail.com">hondaporta@gmail.com</a></div>
         </div>
         <div class="contact-item">
           <div class="ci-label">Location</div>
@@ -1102,7 +1380,7 @@ footer {
   </div>
 </div>
 
-<!-- Footer -->
+<!-- ===== Footer ===== -->
 <footer role="contentinfo">
   <div class="footer-inner">
     <div class="footer-brand">
@@ -1113,8 +1391,8 @@ footer {
       </svg>
       <span class="footer-brand-text"><span class="a">A</span><span class="h">H</span><span class="i">I</span></span>
     </div>
-    <div class="footer-tagline">Artificial Human Intelligence</div>
-    <div class="footer-copy">&copy; 2026 AHI Inc.</div>
+    <div class="footer-tagline">Where Human Wisdom Meets AI Power</div>
+    <div class="footer-copy">&copy; 2026 AHI — Artificial Human Intelligence</div>
   </div>
 </footer>
 
@@ -1123,16 +1401,17 @@ footer {
   <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
 </button>
 
+<!-- ===== JavaScript ===== -->
 <script>
-// Navigation scroll
+// Navigation scroll effect
 const navbar = document.getElementById('navbar');
-const scrollTop = document.getElementById('scrollTop');
+const scrollTopBtn = document.getElementById('scrollTop');
 window.addEventListener('scroll', () => {
   navbar.classList.toggle('scrolled', window.scrollY > 60);
-  scrollTop.classList.toggle('visible', window.scrollY > 400);
+  scrollTopBtn.classList.toggle('visible', window.scrollY > 400);
 });
 
-scrollTop.addEventListener('click', () => {
+scrollTopBtn.addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
@@ -1150,7 +1429,7 @@ function closeMenu() {
   hamburger.setAttribute('aria-expanded', 'false');
 }
 
-// Reveal on scroll
+// Reveal on scroll (Intersection Observer)
 const reveals = document.querySelectorAll('.reveal');
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach(e => {
@@ -1192,7 +1471,81 @@ const countObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.5 });
 countObserver.observe(numbersRow);
 
-// Contact form success
+// Hero particle canvas (subtle floating particles)
+(function() {
+  const canvas = document.getElementById('heroCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let w, h, particles = [];
+  const PARTICLE_COUNT = 40;
+
+  function resize() {
+    w = canvas.width = canvas.offsetWidth;
+    h = canvas.height = canvas.offsetHeight;
+  }
+
+  function init() {
+    resize();
+    particles = [];
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      particles.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: Math.random() * 1.5 + 0.5,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        alpha: Math.random() * 0.3 + 0.05,
+        gold: Math.random() > 0.7
+      });
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    particles.forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      if (p.gold) {
+        ctx.fillStyle = `rgba(232, 184, 74, ${p.alpha})`;
+      } else {
+        ctx.fillStyle = `rgba(255, 255, 255, ${p.alpha * 0.5})`;
+      }
+      ctx.fill();
+
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < 0) p.x = w;
+      if (p.x > w) p.x = 0;
+      if (p.y < 0) p.y = h;
+      if (p.y > h) p.y = 0;
+    });
+
+    // Draw subtle connection lines between nearby particles
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          const lineAlpha = (1 - dist / 120) * 0.06;
+          ctx.strokeStyle = `rgba(232, 184, 74, ${lineAlpha})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', resize);
+  init();
+  draw();
+})();
+
+// Contact form with Formspree
 const form = document.getElementById('contactForm');
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -1206,8 +1559,8 @@ form.addEventListener('submit', async (e) => {
       headers: { 'Accept': 'application/json' }
     });
     if (res.ok) {
-      btn.textContent = '✓ 送信完了';
-      btn.style.background = 'rgba(107,203,119,0.2)';
+      btn.textContent = '✓ 送信完了 — ありがとうございます';
+      btn.style.background = 'rgba(107,203,119,0.15)';
       btn.style.borderColor = '#6bcb77';
       btn.style.color = '#6bcb77';
       form.reset();
@@ -1217,7 +1570,7 @@ form.addEventListener('submit', async (e) => {
         btn.style.borderColor = '';
         btn.style.color = '';
         btn.disabled = false;
-      }, 3000);
+      }, 4000);
     } else {
       throw new Error();
     }
@@ -1232,6 +1585,20 @@ form.addEventListener('submit', async (e) => {
       btn.style.color = '';
     }, 3000);
   }
+});
+
+// Smooth active nav link highlighting
+const sections = document.querySelectorAll('[id]');
+const navLinksAll = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    const top = s.offsetTop - 120;
+    if (window.scrollY >= top) current = s.getAttribute('id');
+  });
+  navLinksAll.forEach(a => {
+    a.style.color = a.getAttribute('href') === '#' + current ? '#E8B84A' : '';
+  });
 });
 </script>
 </body>
