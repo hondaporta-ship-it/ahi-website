@@ -704,6 +704,275 @@ nav.scrolled {
   letter-spacing: 1px;
 }
 
+/* ===== Results Section ===== */
+.results-band {
+  background: #0e0e12;
+  border-top: 1px solid rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.results-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 120px 48px;
+}
+.results-showcase {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 48px;
+  margin-top: 48px;
+  align-items: center;
+}
+.results-highlight-card {
+  background: linear-gradient(145deg, rgba(232,184,74,0.06), rgba(232,184,74,0.02));
+  border: 1px solid rgba(232,184,74,0.15);
+  border-radius: 20px;
+  padding: 48px 36px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.results-highlight-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #E8B84A, #E8685A);
+}
+.results-roi {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(3rem, 6vw, 4.5rem);
+  font-weight: 800;
+  color: #E8B84A;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.results-roi-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #888;
+  margin-bottom: 24px;
+}
+.results-mini-stats {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  margin-top: 24px;
+}
+.results-mini-stat {
+  text-align: center;
+}
+.results-mini-stat .val {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #f0f0f0;
+}
+.results-mini-stat .val .unit { font-size: 12px; color: #888; font-weight: 400; }
+.results-mini-stat .lbl {
+  font-size: 11px;
+  color: #666;
+  margin-top: 4px;
+}
+.results-detail h3 {
+  font-size: 20px;
+  color: #f0f0f0;
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+.results-detail > p {
+  font-size: 14.5px;
+  color: #999;
+  line-height: 2;
+  margin-bottom: 16px;
+}
+.results-items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 24px;
+}
+.results-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 18px;
+  background: rgba(255,255,255,0.025);
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.04);
+  transition: border-color 0.3s;
+}
+.results-item:hover { border-color: rgba(232,184,74,0.15); }
+.results-item .ri-icon {
+  flex-shrink: 0;
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  background: rgba(232,184,74,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+.results-item .ri-text { font-size: 13.5px; color: #bbb; line-height: 1.6; }
+.results-item .ri-text strong { color: #E8B84A; font-weight: 600; }
+
+.results-market {
+  margin-top: 48px;
+  padding: 32px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.results-market h4 {
+  font-size: 14px;
+  color: #E8B84A;
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+.market-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.market-stat {
+  text-align: center;
+  padding: 16px 0;
+}
+.market-stat .ms-num {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #f0f0f0;
+  line-height: 1.2;
+}
+.market-stat .ms-num .ms-unit { font-size: 12px; color: #888; font-weight: 400; }
+.market-stat .ms-label {
+  font-size: 11px;
+  color: #666;
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+/* ===== EventPro Section ===== */
+.eventpro-band {
+  background: #0e0e12;
+  border-top: 1px solid rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.eventpro-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 120px 48px;
+}
+.eventpro-layout {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 48px;
+  margin-top: 48px;
+  align-items: start;
+}
+.eventpro-text h3 {
+  font-size: 20px;
+  color: #f0f0f0;
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+.eventpro-text > p {
+  font-size: 14.5px;
+  color: #999;
+  line-height: 2;
+  margin-bottom: 16px;
+}
+.eventpro-features {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 24px;
+}
+.eventpro-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 20px;
+  border-left: 2px solid rgba(232,184,74,0.2);
+  background: rgba(255,255,255,0.02);
+  border-radius: 0 10px 10px 0;
+  transition: border-color 0.3s, background 0.3s;
+}
+.eventpro-feature:hover {
+  border-left-color: #E8B84A;
+  background: rgba(255,255,255,0.03);
+}
+.eventpro-feature .ef-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+  line-height: 1;
+  margin-top: 2px;
+}
+.eventpro-feature .ef-content h4 {
+  font-size: 14px;
+  color: #ddd;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.eventpro-feature .ef-content p {
+  font-size: 13px;
+  color: #777;
+  line-height: 1.7;
+  margin-bottom: 0;
+}
+.eventpro-stats-card {
+  background: linear-gradient(145deg, rgba(232,184,74,0.05), rgba(232,184,74,0.02));
+  border: 1px solid rgba(232,184,74,0.12);
+  border-radius: 20px;
+  padding: 40px 32px;
+  text-align: center;
+}
+.eventpro-stats-card h4 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #E8B84A;
+  margin-bottom: 28px;
+}
+.ep-stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.ep-stat {
+  padding: 20px 12px;
+  background: rgba(255,255,255,0.025);
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.04);
+}
+.ep-stat .ep-num {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: #f0f0f0;
+  line-height: 1;
+}
+.ep-stat .ep-num .ep-unit { font-size: 14px; color: #888; font-weight: 400; }
+.ep-stat .ep-label {
+  font-size: 11px;
+  color: #666;
+  margin-top: 6px;
+}
+.eventpro-badge {
+  margin-top: 24px;
+  padding: 16px 20px;
+  background: rgba(232,184,74,0.06);
+  border: 1px solid rgba(232,184,74,0.15);
+  border-radius: 12px;
+  font-size: 13px;
+  color: #ccc;
+  line-height: 1.7;
+}
+.eventpro-badge strong { color: #E8B84A; }
+
 /* ===== Story Section ===== */
 .story-band {
   background: linear-gradient(180deg, #0e0e12 0%, #131318 100%);
@@ -1006,6 +1275,14 @@ footer {
   .numbers-row { gap: 40px; flex-wrap: wrap; }
   .numbers-band { padding: 60px 24px; }
 
+  .results-inner { padding: 80px 24px; }
+  .results-showcase { grid-template-columns: 1fr; }
+  .results-mini-stats { gap: 16px; }
+  .market-stats { grid-template-columns: 1fr; gap: 16px; }
+
+  .eventpro-inner { padding: 80px 24px; }
+  .eventpro-layout { grid-template-columns: 1fr; }
+
   .story-inner { padding: 80px 24px; }
   .story-timeline { flex-direction: column; gap: 24px; }
   .story-timeline::before { display: none; }
@@ -1045,7 +1322,9 @@ footer {
     <li><a href="#about" onclick="closeMenu()">About</a></li>
     <li><a href="#services" onclick="closeMenu()">Services</a></li>
     <li><a href="#strengths" onclick="closeMenu()">Strengths</a></li>
+    <li><a href="#results" onclick="closeMenu()">Results</a></li>
     <li><a href="#story" onclick="closeMenu()">Story</a></li>
+    <li><a href="#eventpro" onclick="closeMenu()">EventPro</a></li>
     <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
   </ul>
   <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="メニューを開く" aria-expanded="false">
@@ -1287,6 +1566,75 @@ footer {
   </div>
 </div>
 
+<!-- ===== Results Section ===== -->
+<div class="results-band" id="results">
+  <div class="results-inner">
+    <div class="reveal">
+      <span class="label">Results</span>
+      <h2>実績 — <span class="gold">ROI 1,253%の実証</span></h2>
+      <div class="bar"></div>
+      <p style="color:#999;font-size:15px;">AHIの手法はすでに自社（ATS）の業務改革で実証済み。<br>投資12万円から始めた小さな変革が、年間183万円の削減効果を生み出しました。</p>
+    </div>
+
+    <div class="results-showcase reveal">
+      <div class="results-highlight-card">
+        <div class="results-roi">1,253<span style="font-size:0.5em;">%</span></div>
+        <div class="results-roi-label">Return on Investment</div>
+        <div class="results-mini-stats">
+          <div class="results-mini-stat">
+            <div class="val">12<span class="unit">万円</span></div>
+            <div class="lbl">初期投資</div>
+          </div>
+          <div class="results-mini-stat">
+            <div class="val">183<span class="unit">万円/年</span></div>
+            <div class="lbl">年間削減効果</div>
+          </div>
+        </div>
+      </div>
+      <div class="results-detail">
+        <h3>ATS社内改革 — AI業務変革の実証ケース</h3>
+        <p>AHI代表が自社（ATS）の業務をAIで変革した実証事例。現場の「本当のボトルネック」を特定し、段階的にAIを導入。理論ではなく、実践で証明したFDEモデルの有効性。</p>
+        <div class="results-items">
+          <div class="results-item">
+            <div class="ri-icon">📊</div>
+            <div class="ri-text">報告書処理の工数を<strong>85%削減</strong>。手作業の転記・集計をAI自動化し、月次処理を数時間から30分に短縮。</div>
+          </div>
+          <div class="results-item">
+            <div class="ri-icon">🤖</div>
+            <div class="ri-text">営業・事務・レポート作成の<strong>主要業務をAI化</strong>。属人的なノウハウを仕組みに転換し、誰でも同品質のアウトプットが可能に。</div>
+          </div>
+          <div class="results-item">
+            <div class="ri-icon">💡</div>
+            <div class="ri-text"><strong>初期投資12万円</strong>（AIツール利用料+セットアップ工数）で開始。大規模投資なしに、小さく始めて確実に成果を出すFDEアプローチを実証。</div>
+          </div>
+          <div class="results-item">
+            <div class="ri-icon">🎯</div>
+            <div class="ri-text">課題定義→設計→実装→定着の全プロセスを一人で完遂。これが<strong>FDEモデルのリアル</strong>——現場を知る者が、現場を変える。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="results-market reveal">
+      <h4>マーケットが求めている — AI業務変革の需要</h4>
+      <div class="market-stats">
+        <div class="market-stat">
+          <div class="ms-num">3,120<span class="ms-unit">億ドル</span></div>
+          <div class="ms-label">グローバルAI市場規模<br>（2026年予測）</div>
+        </div>
+        <div class="market-stat">
+          <div class="ms-num">57.7<span class="ms-unit">%</span></div>
+          <div class="ms-label">日本企業の<br>生成AI導入率</div>
+        </div>
+        <div class="market-stat">
+          <div class="ms-num">70.3<span class="ms-unit">%</span></div>
+          <div class="ms-label">最大課題：<br>リテラシー・スキル不足</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ===== Story Section ===== -->
 <div class="story-band" id="story">
   <div class="story-inner">
@@ -1321,6 +1669,74 @@ footer {
         <div class="timeline-dot"></div>
         <div class="timeline-year">2026</div>
         <div class="timeline-text">AHI設立<br>FDEカンパニーへ</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== EventPro Section ===== -->
+<div class="eventpro-band" id="eventpro">
+  <div class="eventpro-inner">
+    <div class="reveal">
+      <span class="label">EventPro</span>
+      <h2>EventPro — <span class="gold">イベントディレクター・マッチング</span></h2>
+      <div class="bar"></div>
+    </div>
+
+    <div class="eventpro-layout reveal">
+      <div class="eventpro-text">
+        <h3>30年の現場力を、業界のインフラに。</h3>
+        <p>AHI代表・本田の30年にわたるイベントディレクション経験をもとに、優秀なイベントディレクターと企業・主催者をマッチングするプラットフォーム事業です。</p>
+        <p>「イベントの成否はディレクターで決まる」——この現場の常識を仕組みにし、品質の標準化とディレクターのキャリア支援を両立させます。</p>
+
+        <div class="eventpro-features">
+          <div class="eventpro-feature">
+            <div class="ef-icon">🎪</div>
+            <div class="ef-content">
+              <h4>厳選されたディレクターネットワーク</h4>
+              <p>実績と現場力を基準に選抜された20名のプロフェッショナル集団。企業イベント、展示会、カンファレンス、地域祭事まで幅広く対応。</p>
+            </div>
+          </div>
+          <div class="eventpro-feature">
+            <div class="ef-icon">🤖</div>
+            <div class="ef-content">
+              <h4>AI活用による最適マッチング</h4>
+              <p>イベントの規模・種類・地域・予算に応じて、最適なディレクターをAIがレコメンド。ミスマッチを排除し、成功率を最大化。</p>
+            </div>
+          </div>
+          <div class="eventpro-feature">
+            <div class="ef-icon">📋</div>
+            <div class="ef-content">
+              <h4>品質管理と標準化</h4>
+              <p>30年の現場ノウハウをフレームワーク化。進行管理、リスク管理、振り返りの仕組みを標準化し、安定したイベント品質を提供。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="eventpro-stats-card">
+        <h4>EventPro — Key Numbers</h4>
+        <div class="ep-stat-grid">
+          <div class="ep-stat">
+            <div class="ep-num">20<span class="ep-unit">名</span></div>
+            <div class="ep-label">登録ディレクター</div>
+          </div>
+          <div class="ep-stat">
+            <div class="ep-num">9,600<span class="ep-unit">万円</span></div>
+            <div class="ep-label">年間売上目標</div>
+          </div>
+          <div class="ep-stat">
+            <div class="ep-num">40<span class="ep-unit">万円〜</span></div>
+            <div class="ep-label">案件単価</div>
+          </div>
+          <div class="ep-stat">
+            <div class="ep-num">全国</div>
+            <div class="ep-label">対応エリア</div>
+          </div>
+        </div>
+        <div class="eventpro-badge">
+          <strong>AHI × EventPro</strong> — AI業務変革とイベント事業の二本柱。<br>現場力とテクノロジーの融合が、AHIの事業基盤を支えます。
+        </div>
       </div>
     </div>
   </div>
